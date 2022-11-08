@@ -12,8 +12,6 @@ static FILE* logFile                =              stdout;
 
 //=====================================================================================================================================
 
-static bool isStackEmpty     (stack_t* const stk);
-static int  isStackCorrect   (stack_t* const stk);
 static void stackIncrease    (stack_t* const stk);
 static void stackDecrease    (stack_t* const stk);
 static void dataInit         (stack_t* stk);
@@ -95,36 +93,6 @@ void StackDtor (stack_t* const stk)
         stk-> leftCanary  = 0;
         stk->rightCanary  = 0;
     #endif
-}
-
-//=====================================================================================================================================
-
-static bool isStackEmpty (stack_t* const stk)
-{
-    ASSERT (stk != nullptr);
-
-    if (!(stk -> data == nullptr))
-        return 1;
-    if (!(stk -> size == 0))
-        return 1;
-    if (!(stk -> capacity == 0))
-        return 1;
-
-    return 0; 
-}
-
-//=====================================================================================================================================
-
-static int isStackCorrect (stack_t* const stk)
-{
-    ASSERT (stk != nullptr);
-
-    if (stk -> data == nullptr)
-        return 1;
-    if (stk->size > stk->capacity)
-        return 1;
-    
-    return 0;
 }
 
 //=====================================================================================================================================

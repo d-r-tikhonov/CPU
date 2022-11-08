@@ -256,14 +256,14 @@ int HandleRegAndNum (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char
 
     char reg_name[RegNameMaxLen] = {};
 
-    if (read_res = sscanf (ptr_arg, ram_mask1, &arg, reg_name))
+    if ((read_res = sscanf (ptr_arg, ram_mask1, &arg, reg_name)) == 1)
     {
         cmd_code |= ARG_RAM;
     }
 
     if (read_res < 2)
     {
-        if (read_res = sscanf (ptr_arg, ram_mask2, reg_name, &arg))    
+        if ((read_res = sscanf (ptr_arg, ram_mask2, reg_name, &arg)) == 1)    
         {
             cmd_code |= ARG_RAM;
         }
@@ -300,7 +300,7 @@ int HandleNum (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char* mask
     int  arg      = 0;
     int  read_res = 0;
 
-    if (read_res = sscanf (ptr_arg, ram_mask1, &arg))        
+    if ((read_res = sscanf (ptr_arg, ram_mask1, &arg)) == 1)        
     {
         cmd_code |= ARG_RAM;
     }
@@ -329,7 +329,7 @@ int HandleReg (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char* mask
 
     char reg_name[RegNameMaxLen] = {};
 
-    if (read_res = sscanf (ptr_arg, ram_mask1, reg_name))        
+    if ((read_res = sscanf (ptr_arg, ram_mask1, reg_name)) == 1)        
     {
         cmd_code |= ARG_RAM;
     }
@@ -443,7 +443,7 @@ size_t ReadVersion (const char* filename)
 
     size_t version = 0;
 
-    fread (&version, sizeof(int), 1, versionFile);
+    fread (&version, sizeof (int), 1, versionFile);
 
     if ((fclose (versionFile)) != 0)
     {
@@ -562,7 +562,7 @@ int CreateArrayStructs (type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_s
         {
             if (!(isLineEmpty (ptr_prev_line)))
             {
-                (ptr_arr_structs->Ptr)[index_line] = {ptr_prev_line, (ptr_text_buf->Ptr) + i - ptr_prev_line};
+                ptr_arr_structs->Ptr[index_line] = {ptr_prev_line, (ptr_text_buf->Ptr) + i - ptr_prev_line};
 
                 index_line++;
             }
