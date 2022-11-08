@@ -25,10 +25,6 @@ static elem_t* recallocStack (stack_t* const stk, const size_t capacity);
     static canary_t* rightCanary (void* const data, const size_t capacity);
 #endif
 
-#ifdef HASH_PROTECT
-    static hash_t hashStack (stack_t *const stk, uint32_t seed);
-#endif
-
 static void nullValueSet (elem_t* data, size_t size);
 
 //=====================================================================================================================================
@@ -46,10 +42,6 @@ void StackCtor (stack_t* const stk)
         stk-> leftCanary = Canary;
         stk->rightCanary = Canary;
     #endif
-
-    #ifdef HASH_PROTECT
-        stk->hash = hashStack (stk, Seed);
-    #endif
 }
 
 //=====================================================================================================================================
@@ -62,10 +54,6 @@ void StackPush (stack_t* stk, const elem_t item)
 
     stk->data[stk->size] = item;
     stk->size++;
-
-    #ifdef HASH_PROTECT
-        stk->hash = hashStack (stk, Seed);
-    #endif
 }
 
 //=====================================================================================================================================
@@ -83,10 +71,6 @@ elem_t StackPop (stack_t* const stk)
     
     stk->size--;
     stk->data[stk->size] = Poison;
-
-    #ifdef HASH_PROTECT
-        stk->hash = hashStack (stk, Seed);
-    #endif
 
     return item;
 }
@@ -106,10 +90,6 @@ void StackDtor (stack_t* const stk)
     stk->data     = nullptr;
     stk->capacity = 0;
     stk->size     = 0;
-
-    #ifdef HASH_PROTECT
-        stk->hash = 0;
-    #endif
 
     #ifdef CANARY_PROTECT
         stk-> leftCanary  = 0;
@@ -174,11 +154,6 @@ void StackDump (stack_t* const stk)
         fprintf (logFile, " Address   end: %#0X\n", (size_t) stk->data + sizeof (elem_t) * stk->capacity);
         fprintf (logFile, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
     }
-    #ifdef HASH_PROTECT 
-        fprintf (logFile, " Hash      : %8x\n", hashStack (stk, Seed));
-        fprintf (logFile, " Saved hash: %8x\n", stk->hash);
-        fprintf (logFile, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-    #endif
 
     #ifdef CANARY_PROTECT
         fprintf (logFile, " Left  stack canary = %#0X\n", stk->leftCanary);
@@ -324,20 +299,6 @@ static void stackDecrease (stack_t* const stk)
         stk->capacity = newCapacity;
     }
 }
-
-//=====================================================================================================================================
-
-#ifdef HASH_PROTECT
-    static hash_t hashStack (stack_t *const stk, uint32_t seed)
-    {
-        ASSERT (stk != nullptr);
-
-        hash_t  stkHash = murmurHash (stk, sizeof (stack_t), seed);
-        hash_t dataHash = murmurHash (stk->data, stk->capacity * sizeof (elem_t), seed);
-
-        return stkHash ^ dataHash;
-    }
-#endif
 
 //=====================================================================================================================================
 

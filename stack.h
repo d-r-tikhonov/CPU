@@ -10,7 +10,6 @@
 #include <stdio.h>
 #include <errno.h>
 #include <stdint.h>
-#include <TXLib.h>
 
 #include "errors.h"
 #include "processor_config.h"
@@ -25,14 +24,6 @@
 	typedef uint32_t canary_t;
 	const   uint32_t Canary = 0xCAFEBABE;
 #endif
-
-//=====================================================================================================================================
-
-#ifdef HASH_PROTECT
-	typedef uint32_t hash_t;
-	const uint32_t Seed = 0xC0FFEE;
-#endif
-
 //=====================================================================================================================================
 
 struct stack_t
@@ -45,10 +36,6 @@ struct stack_t
 	size_t size     = 0;
 	size_t capacity = 0;
 
-	#ifdef HASH_PROTECT
-		hash_t hash = 0;
-	#endif	
-
 	#ifdef CANARY_PROTECT
 		canary_t rightCanary = 0;
 	#endif
@@ -56,23 +43,11 @@ struct stack_t
 
 //=====================================================================================================================================
 
-void StackCtor (stack_t* const stk);
-
-//=====================================================================================================================================
-
-void StackPush (stack_t* stk, const elem_t item);
-
-//=====================================================================================================================================
-
-elem_t StackPop (stack_t* const stk);
-
-//=====================================================================================================================================
-
-void StackDtor (stack_t* const stk);
-
-//=====================================================================================================================================
-
-void StackDump (stack_t* const stk);
+void 	StackCtor 	(stack_t* const stk);
+void 	StackPush 	(stack_t* stk, const elem_t item);
+elem_t 	StackPop 	(stack_t* const stk);
+void 	StackDtor 	(stack_t* const stk);
+void 	StackDump 	(stack_t* const stk);
 
 //=====================================================================================================================================
 
