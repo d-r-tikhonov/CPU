@@ -68,12 +68,12 @@ typedef struct CPU_struct
 //=====================================================================================================================================
 
 int     Execute         (CPU* cpu);
-int     PrintRAM        (size_t format, CPU* cpu, size_t len_line);
+void    PrintRAM        (size_t format, CPU* cpu, size_t len_line);
 int*    GetArg          (CPU* cpu);
 void    PushArg         (CPU* cpu);
 int     PopArg          (CPU* cpu);
 void    CpuCtor         (CPU* cpu);
-int     CPUDtor         (CPU* cpu);
+void    CPUDtor         (CPU* cpu);
 int     checkSign       (CPU* cpu, FILE* a_code);
 int     getCode         (CPU* cpu);
 size_t  ReadVersion     (const char* filename);

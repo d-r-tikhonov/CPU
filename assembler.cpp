@@ -550,7 +550,7 @@ int MakePointersToLines (type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_
 
 //=====================================================================================================================================
 
-int CreateArrayStructs (type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_structs)
+void CreateArrayStructs (type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_structs)
 {
     unsigned long int index_line = 0;
 
@@ -570,8 +570,6 @@ int CreateArrayStructs (type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_s
             ptr_prev_line = (ptr_text_buf->Ptr) + i + 1;
         }
     }
-
-    return 1;
 }
 
 //=====================================================================================================================================

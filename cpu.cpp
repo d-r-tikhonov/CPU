@@ -68,7 +68,7 @@ void SkipNewLines ()
     }          
 }
 
-int PrintRAM (size_t format, CPU* cpu, size_t len_line)
+void PrintRAM (size_t format, CPU* cpu, size_t len_line)
 {
     int* ptr_RAM = cpu->RAM;
 
@@ -184,7 +184,7 @@ void CpuCtor (CPU* cpu)
     ASSERT (cpu->regs != nullptr);
 }
 
-int CPUDtor (CPU* cpu)
+void CPUDtor (CPU* cpu)
 {
     ASSERT (cpu->RAM != nullptr);
     free   (cpu->RAM);
@@ -200,7 +200,7 @@ int checkSign (CPU* cpu, FILE* file_asm)
 {
     char asm_sign[MAX_LEN_SIGN] = {};
 
-    int num_read_lines = fscanf (file_asm, "%3s", asm_sign);
+    fscanf (file_asm, "%3s", asm_sign);
 
     if (strcmp (asm_sign, cpu->signature))
     {
@@ -241,4 +241,6 @@ int getCode (CPU* cpu)
     printf ("\n");
 
     fclose (file_asm);
+
+    return 0;
 }
