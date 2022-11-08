@@ -114,7 +114,7 @@ int     ReadFile                (const char* filename, type_buf_char* ptr_text_b
 int     ReadInBuffer            (FILE* file, type_buf_char* ptr_text_buf);
 FILE*   OpenReadingFile         (const char* filename); //
 int     MakePointersToLines     (type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_structs);
-int     create_array_structs    (type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_structs);
+int     CreateArrayStructs      (type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_structs);
 int     FileSize                (FILE* file);
 int     GetAmountsOfLines       (type_buf_char* ptr_text_buf);
 bool    isLetter                (char sym);

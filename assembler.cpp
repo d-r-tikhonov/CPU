@@ -543,14 +543,14 @@ int MakePointersToLines (type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_
     ptr_arr_structs->Ptr  = (type_prop_line*) calloc (ptr_text_buf->Num_lines, sizeof (type_prop_line));
     ptr_arr_structs->Size = ptr_text_buf->Num_lines;
 
-    create_array_structs (ptr_text_buf, ptr_arr_structs);
+    CreateArrayStructs (ptr_text_buf, ptr_arr_structs);
 
     return 0;
 }
 
 //=====================================================================================================================================
 
-int create_array_structs (type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_structs)
+int CreateArrayStructs (type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_structs)
 {
     unsigned long int index_line = 0;
 
