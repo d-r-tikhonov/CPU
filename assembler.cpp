@@ -19,8 +19,8 @@ const size_t CmdMaxLen        = 30;
 const size_t LabelsMaxNum     = 30;
 const size_t RegNameMaxLen    = 5;
 const char*  NameFileASM      = "ASM.txt";
-const char*  Signature        = "MDA";
-const char*  InputFileName    = "solveQE.txt";
+const char*  Signature        = "DRT";
+const char*  InputFileName    = "factorial.txt";
 
 //=====================================================================================================================================
 

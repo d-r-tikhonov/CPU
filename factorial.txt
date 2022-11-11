@@ -1,7 +1,7 @@
 name factorial 0
 name if_one 1
 name end 2
-push 10
+push 6
 call factorial
 push rcx
 out

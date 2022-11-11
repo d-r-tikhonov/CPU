@@ -4,7 +4,7 @@
 
 //=====================================================================================================================================
 
-const char*     CPU_SIGNATURE   = "MDA";
+const char*     CPU_SIGNATURE   = "DRT";
 const char*     NAME_FILE_CODE  = "ASM.txt";
 const size_t    RAM_SIZE        = 5000;
 const size_t    REG_SIZE        = 30;

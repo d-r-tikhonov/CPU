@@ -31,7 +31,7 @@
 
 //=====================================================================================================================================
 
-const char* DISASM_SIGNATURE        = "MDA";
+const char* DISASM_SIGNATURE        = "DRT";
 const char* ASM_FILE_NAME_DISASM    = "ASM.txt";
 const int   MAX_LEN_CMD             = 6;
 
