@@ -29,8 +29,6 @@
 
 DEF_CMD(HLT, 0, 0,
 {
-    printf ("MEOW!\n");
-
     return 0;
 })
 
@@ -146,7 +144,7 @@ DEF_CMD(JNE, 15, 1,
 
 DEF_CMD(DRAW, 18, 0,
 {
-    PrintRAM(BIN_FORMAT, cpu, 100); //const, static screen
+    PrintRAM(BIN_FORMAT, cpu, 100);
 })
 
 DEF_CMD(CALL, 19, 1,

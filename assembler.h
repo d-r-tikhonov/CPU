@@ -88,8 +88,6 @@ typedef struct buffer_structs
 
 //=====================================================================================================================================
 
-int     PrintASM                (asm_t* asm_code);
-int     SkipSpace               (char** cursor);
 int     HandleNum               (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char* mask1, const char* ram_mask1);
 int     HandleReg               (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char* mask1, const char* ram_mask1);
 elem_t  PutArg                  (size_t cmd_code, char* ptr_arg, asm_t* asm_code);
@@ -112,15 +110,16 @@ int     HandleRegAndNum         (asm_t* asm_code, size_t cmd_code, char* ptr_arg
                                 const char* mask2, const char* ram_mask1, const char* ram_mask2);
 int     ReadFile                (const char* filename, type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_structs);
 int     ReadInBuffer            (FILE* file, type_buf_char* ptr_text_buf);
-FILE*   OpenReadingFile         (const char* filename); //
+FILE*   OpenReadingFile         (const char* filename); 
 int     MakePointersToLines     (type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_structs);
 void    CreateArrayStructs      (type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_structs);
 int     FileSize                (FILE* file);
 int     GetAmountsOfLines       (type_buf_char* ptr_text_buf);
 bool    isLetter                (char sym);
-FILE*   OpenWFile               (const char* filename); //
+FILE*   OpenWFile               (const char* filename); 
 int     isLineEmpty             (char* ptr_line);
-int     isEndOfFile             (char sym);
+bool    isEndOfFile             (char sym);
+int     SkipSpace               (char** cursor);
 
 //=====================================================================================================================================
 

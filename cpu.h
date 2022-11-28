@@ -11,6 +11,7 @@
 
 #include "stack.h"
 #include "config.h"
+#include "assembler.h"
 
 //=====================================================================================================================================
 
@@ -76,7 +77,6 @@ void    CpuCtor         (CPU* cpu);
 void    CPUDtor         (CPU* cpu);
 int     checkSign       (CPU* cpu, FILE* a_code);
 int     getCode         (CPU* cpu);
-size_t  ReadVersion     (const char* filename);
 void    SkipNewLines    ();
 int     Run             ();
 

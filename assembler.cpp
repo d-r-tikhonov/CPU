@@ -20,7 +20,7 @@ const size_t LabelsMaxNum     = 30;
 const size_t RegNameMaxLen    = 5;
 const char*  NameFileASM      = "ASM.txt";
 const char*  Signature        = "DRT";
-const char*  InputFileName    = "factorial.txt";
+const char*  InputFileName    = "solveQE.txt";
 
 //=====================================================================================================================================
 
@@ -84,7 +84,7 @@ int UserCodeToASM (type_buf_char* ptr_user_code, type_buf_structs* ptr_arr_struc
         cursor = (ptr_arr_structs->Ptr)[i].Loc;
         SkipSpace (&cursor);
         sscanf (cursor, "%s", cmd);
-        cursor = cursor + strlen ((const char*)cmd);
+        cursor = cursor + strlen ((const char*) cmd);
 
         if (false)
         {
@@ -109,20 +109,6 @@ int UserCodeToASM (type_buf_char* ptr_user_code, type_buf_structs* ptr_arr_struc
 
 //=====================================================================================================================================
 
-int PrintASM (asm_t* asm_code)
-{
-    size_t numbers_in_size = (size_t) ceil (log10 ((double) asm_code->Size));
-
-    for (size_t i = 0; i < asm_code->Ip; i++)
-    {
-        printf ("ASM[%0*d]: %d\n", numbers_in_size, i, (asm_code->Ptr)[i]);
-    }
-
-    return 0;
-}
-
-//=====================================================================================================================================
-
 int SkipSpace (char** cursor)
 {
     while (**cursor == ' ') 
@@ -141,7 +127,7 @@ int SearchLabelByName (label_field* labels, char* name)
 
     while (i < LabelsMaxNum)
     {
-        if (!(strcmp (labels[i].Name, name)))
+        if (strcmp (labels[i].Name, name) == 0)
         {
             return i;
         }
@@ -175,7 +161,7 @@ int FuncName (char* ptr_arg, asm_t* asm_code)
 
     char label_name[MAX_LEN_LABEL_NAME] = {};
 
-    if (!(sscanf (ptr_arg, "%s", label_name)))
+    if (sscanf (ptr_arg, "%s", label_name) == 0)
     {
         printf ("Error in function: %s. Label ERROR!\n", __func__);
         return -1;
@@ -185,7 +171,7 @@ int FuncName (char* ptr_arg, asm_t* asm_code)
 
     ptr_arg += strlen ((const char*)label_name);
 
-    if (!(sscanf (ptr_arg, "%d", &num_label)))
+    if (sscanf (ptr_arg, "%llu", &num_label) == 0)
     {
         printf ("Error in function: %s. Label ERROR!\n", __func__);        
         return -1;
@@ -273,13 +259,7 @@ int HandleRegAndNum (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char
     {
         read_res = sscanf (ptr_arg, mask1, &arg, reg_name);
     }
-
-    if (!read_res < 2)
-    {
-        read_res = sscanf (ptr_arg, mask2, reg_name, &arg);
-    }
-
-    if (read_res == 2)
+    else if (read_res == 2)
     {
         (asm_code->Ptr)[(asm_code->Ip)++] = cmd_code | ARG_IMMED | ARG_REG;
 
@@ -288,6 +268,10 @@ int HandleRegAndNum (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char
         asm_code->Ptr[(asm_code->Ip)++] = arg;
 
         return 0;
+    }
+    else
+    {
+        read_res = sscanf (ptr_arg, mask2, reg_name, &arg);
     }
 
     return 1;
@@ -407,6 +391,7 @@ int WriteASM (int* ptr_asm, const char* filename, size_t buf_size)
     ASSERT (file != nullptr);
 
     WriteHead (file, buf_size);
+    
     PutBuffer (file, ptr_asm, buf_size);
 
     fclose (file);
@@ -421,7 +406,9 @@ int WriteHead (FILE* file, size_t buf_size)
     fwrite (Signature, sizeof (char), strlen (Signature), file);
 
     size_t version = ReadVersion (VersionFile);
+
     UpdateVersion (VersionFile, &version);
+
     WriteVersion (file, version);
 
     fwrite (&buf_size, sizeof (int), 1, file);
@@ -461,7 +448,9 @@ int UpdateVersion (const char* filename, size_t* ptr_version)
 
     FILE* versionFile = OpenWFile (filename);
     ASSERT (versionFile != nullptr);
+
     fwrite (ptr_version, sizeof (int), 1, versionFile);
+
     if ((fclose (versionFile)) != 0)
     {
         printf ("Error in function: %s. Error closing versionFile!\n", __func__);
@@ -474,7 +463,7 @@ int UpdateVersion (const char* filename, size_t* ptr_version)
 
 int WriteVersion (FILE* file, size_t version)
 {
-    fwrite (&version, sizeof(int), 1, file);
+    fwrite (&version, sizeof (int), 1, file);
     
     return 0;
 }
@@ -558,9 +547,9 @@ void CreateArrayStructs (type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_
 
     for (size_t i = 0; i < ptr_text_buf->Size; i++)
     {
-        if (isEndOfFile ((ptr_text_buf->Ptr)[i]))
+        if (isEndOfFile ((ptr_text_buf->Ptr)[i]) == 1)
         {
-            if (!(isLineEmpty (ptr_prev_line)))
+            if (isLineEmpty (ptr_prev_line) == 0)
             {
                 ptr_arr_structs->Ptr[index_line] = {ptr_prev_line, (ptr_text_buf->Ptr) + i - ptr_prev_line};
 
@@ -635,14 +624,14 @@ bool isLetter (char sym)
 
 FILE* OpenWFile (const char* filename)
 {
-    FILE* w_file = fopen (filename, "wb");
+    FILE* stream = fopen (filename, "wb");
 
-    if (w_file == nullptr)
+    if (stream == nullptr)
     {
         return nullptr;
     }
 
-    return w_file;
+    return stream;
 }
 
 //=====================================================================================================================================
@@ -678,7 +667,7 @@ int isLineEmpty (char* ptr_line)
 
 //=====================================================================================================================================
 
-int isEndOfFile (char sym)
+bool isEndOfFile (char sym)
 {
     return (sym == '\0' || sym == '\n' || sym == '\r') ? true : false;
 }

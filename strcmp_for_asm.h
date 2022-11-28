@@ -27,8 +27,6 @@
     }                                                        \
 }
 
-// for assembler
-
 #define WRITE_CMD_NUM   {(asm_code->Ptr)[(asm_code->Ip)++] = cmd_code;};
 
 #define WRITE_ARG_JUMP  {FuncJump(cursor, asm_code);};
@@ -46,7 +44,6 @@ DEF_CMD(HLT, 0, 0,
     WRITE_CMD_NUM;
 #else
     {
-        printf ("MEOW!\n");
         return 0;
     };
 #endif
@@ -235,7 +232,7 @@ DEF_CMD(JNE, 15, 1,
 };
 #endif
 )
-//directive
+
 DEF_CMD(NAME, 16, 0,
 #ifndef RUN_MODE
 {
@@ -243,7 +240,8 @@ DEF_CMD(NAME, 16, 0,
 }
 #endif
 )
-//directive
+
+
 DEF_CMD(LBL , 17, 0,
 #ifndef RUN_MODE
 {
@@ -257,7 +255,7 @@ DEF_CMD(DRAW, 18, 0,
     WRITE_CMD_NUM;
 #else
 {
-    PrintRAM(BIN_FORMAT, cpu, 100); //const, static screen
+    PrintRAM(BIN_FORMAT, cpu, 100);
 };
 #endif
 )
@@ -322,8 +320,6 @@ DEF_CMD(CLEAR, 23, 0,
 };
 #endif
 )
-
-//1 file for asm and proc
 
 //=====================================================================================================================================
 
