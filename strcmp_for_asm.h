@@ -5,13 +5,13 @@
 
 #define DO_JUMP        {cpu->ip = cpu->code[(cpu->ip)+1] - 2;}
 
-#define DO_POP         ({(double)StackPop(stk) / ACCURACY;})
+#define DO_POP         ({(double)StackPop(stk) / Accuracy;})
 
-#define DO_PUSH(arg)   StackPush(stk, (arg) * ACCURACY);
+#define DO_PUSH(arg)   StackPush(stk, (arg) * Accuracy);
 
-#define REMEMBER_CALL  {StackPush(cpu->StkCalls, cpu->ip);};
+#define REMEMBER_CALL  {StackPush(cpu->stkCalls, cpu->ip);};
 
-#define RETURN_TO_CALL {cpu->ip = StackPop(cpu->StkCalls) + 1;};
+#define RETURN_TO_CALL {cpu->ip = StackPop(cpu->stkCalls) + 1;};
 
 #define SKIP_ARG       {(cpu->ip)++;};
 
@@ -54,7 +54,7 @@ DEF_CMD(PUSH, 1, 2,
     WRITE_STACK_ARG;
 #else
 {
-    DO_PUSH(((double)*GetArg(cpu)) / ACCURACY);
+    DO_PUSH(((double)*GetArg(cpu)) / Accuracy);
 };
 #endif
 )
@@ -66,7 +66,7 @@ DEF_CMD(POP, 2, 2,
 {
     int* ptr = GetArg(cpu);
 
-    *ptr = DO_POP * ACCURACY;
+    *ptr = DO_POP * Accuracy;
 };
 #endif
 )

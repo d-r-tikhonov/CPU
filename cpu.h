@@ -32,8 +32,7 @@
 //=====================================================================================================================================
 
 const int       CMD_MASK        =   31;
-const size_t    MAX_LEN_SIGN    =   20;
-const int       ACCURACY        = 1000;
+const int       Accuracy        = 1000;
 
 //=====================================================================================================================================
 
@@ -46,7 +45,7 @@ enum CPU_ERRORS
     INVALID_MEM_INDEX = 5
 };
 
-enum PrintRAMFromats
+enum PrintRAMFormats
 {
     BIN_FORMAT = 0,
     SYM_FORMAT = 1,
@@ -54,29 +53,32 @@ enum PrintRAMFromats
 };
 
 
-typedef struct CPU_struct
+struct cpu_t
 {
     int*        code;
     int*        regs;
     int*        RAM;
+
     const char* signature;
+
     size_t      ip;
-    size_t      Size;
-    stack_t*    Stk;
-    stack_t*    StkCalls;
-} CPU;
+    size_t      size;
+
+    stack_t*    stk;
+    stack_t*    stkCalls;
+};
 
 //=====================================================================================================================================
 
-int     Execute         (CPU* cpu);
-void    PrintRAM        (size_t format, CPU* cpu, size_t len_line);
-int*    GetArg          (CPU* cpu);
-void    PushArg         (CPU* cpu);
-int     PopArg          (CPU* cpu);
-void    CpuCtor         (CPU* cpu);
-void    CPUDtor         (CPU* cpu);
-int     checkSign       (CPU* cpu, FILE* a_code);
-int     getCode         (CPU* cpu);
+int     Execute         (cpu_t* cpu);
+void    PrintRAM        (size_t format, cpu_t* cpu, size_t len_line);
+int*    GetArg          (cpu_t* cpu);
+void    PushArg         (cpu_t* cpu);
+int     PopArg          (cpu_t* cpu);
+void    CpuCtor         (cpu_t* cpu);
+void    CPUDtor         (cpu_t* cpu);
+int     checkSign       (cpu_t* cpu, FILE* fileASM);
+int     getCode         (cpu_t* cpu);
 void    SkipNewLines    ();
 int     Run             ();
 

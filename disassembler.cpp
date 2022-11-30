@@ -31,7 +31,7 @@
 
 //=====================================================================================================================================
 
-const char* DISASM_SIGNATURE        = "DRT";
+const char* DISASM_SIGNATURE        = "SGN";
 const char* ASM_FILE_NAME_DISASM    = "ASM.txt";
 const int   MAX_LEN_CMD             = 6;
 
@@ -39,7 +39,7 @@ const int   MAX_LEN_CMD             = 6;
 
 int MakeReadableCode ()
 {
-    disasm_t disasm = {NULL, 0, 0, DISASM_SIGNATURE, NULL, 0};
+    disasm_t disasm = {nullptr, 0, 0, DISASM_SIGNATURE, nullptr, 0};
 
     getCodeForDisasm (&disasm);
 

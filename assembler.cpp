@@ -8,7 +8,7 @@ const char*  VersionFile      = "version.txt";
 size_t       VersionRepeat    = 1024;
 const size_t RegNameMaxLen    = 5;
 const char*  NameFileASM      = "ASM.txt";
-const char*  Signature        = "DRT";
+const char*  Signature        = "SGN";
 const char*  InputFileName    = "solveQE.txt";
 
 //=====================================================================================================================================
@@ -26,12 +26,12 @@ int Assemble (int argc, char** argv)
 {
     HandleCmdArgs (argc, argv);
 
-    type_buf_char      user_code   = {NULL, 0, 0};
-    type_buf_structs   arr_structs = {NULL, 0   };
+    type_buf_char      user_code   = {nullptr, 0, 0};
+    type_buf_structs   arr_structs = {nullptr, 0   };
 
     label_field labels[MaxLen] = {};
 
-    asm_t asm_code = {NULL, 0, 0, labels};
+    asm_t asm_code = {nullptr, 0, 0, labels};
 
     ReadFile (InputFileName, &user_code, &arr_structs);
 
@@ -388,7 +388,11 @@ int WriteASM (int* ptr_asm, const char* filename, size_t buf_size)
     
     PutBuffer (stream, ptr_asm, buf_size);
 
-    fclose (stream);
+    if (fclose (stream) != 0)
+    {
+        printf ("Error in function: %s. Error closing file!\n", __func__);
+        return errno;
+    }
 
     return 0;
 }
@@ -429,6 +433,7 @@ size_t ReadVersion (const char* filename)
     if (fclose (versionFile) != 0)
     {
         printf ("Error in function: %s. Error closing versionFile!\n", __func__);
+        return errno;
     }
 
     return version;

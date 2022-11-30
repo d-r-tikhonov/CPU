@@ -5,9 +5,9 @@
 
 #define DO_JUMP        {cpu->ip = cpu->code[(cpu->ip)+1] - 2;}
 
-#define DO_POP         ({(double)StackPop(stk) / ACCURACY;})
+#define DO_POP         ({(double)StackPop(stk) / Accuracy;})
 
-#define DO_PUSH(arg)   StackPush(stk, (arg) * ACCURACY);
+#define DO_PUSH(arg)   StackPush(stk, (arg) * Accuracy);
 
 #define REMEMBER_CALL  {StackPush(cpu->StkCalls, cpu->ip);};
 
@@ -36,14 +36,14 @@ DEF_CMD(HLT, 0, 0,
 
 DEF_CMD(PUSH, 1, 1,
 {
-    DO_PUSH(((double)*GetArg(cpu)) / ACCURACY);
+    DO_PUSH(((double)*GetArg(cpu)) / Accuracy);
 })
 
 DEF_CMD(POP, 2, 1,
 {
     int* ptr = GetArg(cpu);
 
-    *ptr = DO_POP * ACCURACY;
+    *ptr = DO_POP * Accuracy;
 })
 
 DEF_CMD(ADD, 3, 0,

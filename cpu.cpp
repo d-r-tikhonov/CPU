@@ -4,25 +4,25 @@
 
 //=====================================================================================================================================
 
-const char*     CPU_SIGNATURE   = "DRT";
-const char*     NAME_FILE_CODE  = "ASM.txt";
-const size_t    RAM_SIZE        = 5000;
-const size_t    REG_SIZE        = 30;
+const char*     NameFileCode    = "ASM.txt";    
+const char*     SignatureCPU    = "SGN";
+const size_t    RamSize         = 5000;
+const size_t    RegSize         = 30;
 
 //=====================================================================================================================================
 
 int Run ()
 {
-    stack_t stk1 = {};
-    StackCtor (&stk1);
+    stack_t stk = {};
+    StackCtor (&stk);
     
-    stack_t stkCalls1 = {};
-    StackCtor (&stkCalls1);
+    stack_t stkCalls = {};
+    StackCtor (&stkCalls);
 
-    CPU cpu = {NULL, NULL, NULL, CPU_SIGNATURE, 0, 0, &stk1, &stkCalls1};
+    cpu_t cpu = {nullptr, nullptr, nullptr, SignatureCPU, 0, 0, &stk, &stkCalls};
     getCode (&cpu);
 
-    if (Execute(&cpu))
+    if (Execute (&cpu))
     {
         printf ("Error in function: %s.\n", __func__);
     }
@@ -34,14 +34,14 @@ int Run ()
 
 //=====================================================================================================================================
 
-int Execute (CPU* cpu)
+int Execute (cpu_t* cpu)
 {
     ASSERT (cpu != nullptr);
 
-    stack_t* stk = cpu->Stk;
+    stack_t* stk = cpu->stk;
     ASSERT (stk != nullptr);
 
-    while (cpu->ip < cpu->Size)
+    while (cpu->ip < cpu->size)
     {
         switch (cpu->code[cpu->ip] & CMD_MASK)
         {
@@ -74,7 +74,7 @@ void SkipNewLines ()
 
 //=====================================================================================================================================
 
-void PrintRAM (size_t format, CPU* cpu, size_t len_line)
+void PrintRAM (size_t format, cpu_t* cpu, size_t len_line)
 {
     int* ptr_RAM = cpu->RAM;
 
@@ -82,13 +82,13 @@ void PrintRAM (size_t format, CPU* cpu, size_t len_line)
     {
         case BIN_FORMAT:
         {
-            size_t screen_size = RAM_SIZE + RAM_SIZE / len_line + 1;
+            size_t screen_size = RamSize + RamSize / len_line + 1;
 
             char* screen = (char*) calloc (screen_size, sizeof (char));
 
             size_t screen_index = 0;
 
-            for (size_t i = 0; i < RAM_SIZE; i++)
+            for (size_t i = 0; i < RamSize; i++)
             {
                 if (i % len_line == 0)
                 {
@@ -112,7 +112,7 @@ void PrintRAM (size_t format, CPU* cpu, size_t len_line)
 
         case SYM_FORMAT:
         {
-            for (size_t i = 0; i < RAM_SIZE; i++)
+            for (size_t i = 0; i < RamSize; i++)
             {
                 if (i % len_line == 0)
                 {
@@ -126,6 +126,7 @@ void PrintRAM (size_t format, CPU* cpu, size_t len_line)
 
         default:
             printf ("Error in function: %s. Unexpected format or printing RAM!\n", __func__);
+            break;
     }
 
     printf ("\n");
@@ -133,7 +134,7 @@ void PrintRAM (size_t format, CPU* cpu, size_t len_line)
 
 //=====================================================================================================================================
 
-int* GetArg (CPU* cpu)
+int* GetArg (cpu_t* cpu)
 {
     size_t cmd_ip = cpu->ip++;
 
@@ -173,7 +174,7 @@ int* GetArg (CPU* cpu)
 
         if (cpu->code[cmd_ip] & ARG_IMMED)
         {
-            arg += cpu->code[cpu->ip++] * ACCURACY;
+            arg += cpu->code[cpu->ip++] * Accuracy;
         }
 
         RETURN_PTR_ARG(&arg);
@@ -182,21 +183,21 @@ int* GetArg (CPU* cpu)
 
 //=====================================================================================================================================
 
-void CpuCtor (CPU* cpu)
+void CpuCtor (cpu_t* cpu)
 {
-    cpu->code = (int*) calloc (cpu->Size, sizeof(int));
+    cpu->code = (int*) calloc (cpu->size, sizeof(int));
     ASSERT (cpu->code != nullptr);
 
-    cpu->RAM = (int*) calloc (RAM_SIZE, sizeof(int));
+    cpu->RAM = (int*) calloc (RamSize, sizeof(int));
     ASSERT (cpu->RAM != nullptr);
 
-    cpu->regs = (int*) calloc (REG_SIZE, sizeof(int));
+    cpu->regs = (int*) calloc (RegSize, sizeof(int));
     ASSERT (cpu->regs != nullptr);
 }
 
 //=====================================================================================================================================
 
-void CPUDtor (CPU* cpu)
+void CPUDtor (cpu_t* cpu)
 {
     ASSERT (cpu->RAM != nullptr);
     free   (cpu->RAM);
@@ -204,17 +205,17 @@ void CPUDtor (CPU* cpu)
     ASSERT (cpu->regs != nullptr);
     free   (cpu->regs);
 
-    StackDtor (cpu->Stk);
-    StackDtor (cpu->StkCalls);
+    StackDtor (cpu->stk);
+    StackDtor (cpu->stkCalls);
 }
 
 //=====================================================================================================================================
 
-int checkSign (CPU* cpu, FILE* file_asm)
+int checkSign (cpu_t* cpu, FILE* fileASM)
 {
-    char asm_sign[MAX_LEN_SIGN] = {};
+    char asm_sign[MaxLen] = {};
 
-    fscanf (file_asm, "%3s", asm_sign);
+    fscanf (fileASM, "%3s", asm_sign);
 
     if (strcmp (asm_sign, cpu->signature))
     {
@@ -225,7 +226,7 @@ int checkSign (CPU* cpu, FILE* file_asm)
     size_t rightVersion = ReadVersion (VersionFile);
     size_t currentVersion = 0;
 
-    fread (&currentVersion, sizeof(int), 1, file_asm);
+    fread (&currentVersion, sizeof (int), 1, fileASM);
 
     if (rightVersion != currentVersion)
     {
@@ -238,25 +239,29 @@ int checkSign (CPU* cpu, FILE* file_asm)
 
 //=====================================================================================================================================
 
-int getCode (CPU* cpu)
+int getCode (cpu_t* cpu)
 {
-    FILE* file_asm = fopen (NAME_FILE_CODE, "rb");
-    ASSERT (file_asm != nullptr);
+    FILE* fileASM = fopen (NameFileCode, "rb");
+    ASSERT (fileASM != nullptr);
 
-    if (checkSign(cpu, file_asm))
+    if (checkSign (cpu, fileASM))
     {
         return WRONG_SIGNATURE;
     }
 
-    fread (&cpu->Size, sizeof(int), 1, file_asm);
+    fread (&cpu->size, sizeof (int), 1, fileASM);
     CpuCtor (cpu);
 
-    fscanf (file_asm, "\n");
-    fread (cpu->code, sizeof(int), cpu->Size, file_asm);
+    fscanf (fileASM, "\n");
+    fread (cpu->code, sizeof (int), cpu->size, fileASM);
 
     printf ("\n");
-
-    fclose (file_asm);
+    
+    if (fclose (fileASM) != 0)
+    {
+        printf ("Error in function: %s. Error closing fileASM!\n", __func__);
+        return errno;
+    }
 
     return 0;
 }
