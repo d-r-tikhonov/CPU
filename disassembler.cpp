@@ -32,7 +32,7 @@
 //=====================================================================================================================================
 
 const char* DISASM_SIGNATURE        = "SGN";
-const char* ASM_FILE_NAME_DISASM    = "ASM.txt";
+const char* ASM_FILE_NAME_DISASM    = "asm.bin  ";
 const int   MAX_LEN_CMD             = 6;
 
 //=====================================================================================================================================
@@ -121,11 +121,11 @@ int Disassemble (disasm_t* disasm)
 {
     ASSERT (disasm != nullptr);
 
-    while (disasm->ip < disasm->Size)
+    while (disasm->ip < disasm->size)
     {
         switch(disasm->asm_code[disasm->ip] & CMD_MASK)
         {
-            #include "strcmp_for_asm.h"
+            #include "architecture.h"
 
             default:
                 return UNDEFINED_CMD;
@@ -140,15 +140,21 @@ int Disassemble (disasm_t* disasm)
 
 int WriteUserCode (disasm_t* disasm, const char* filename)
 {
-    FILE* w_file = fopen (filename, "wb");
-    ASSERT (w_file != nullptr);
+    FILE* stream = fopen (filename, "wb");
+    ASSERT (stream != nullptr);
 
-    size_t num_written_sym = fwrite (disasm->buf_code, sizeof(char), disasm->cursor + 1, w_file);
+    size_t num_written_sym = fwrite (disasm->buf_code, sizeof (char), disasm->cursor + 1, stream);
 
     if (num_written_sym != disasm->cursor + 1)
     {
         printf ("Error in function: %s. Error when writing to a file!\n", __func__);
         return -1;
+    }
+
+    if (fclose (stream) != 0)
+    {
+        printf ("Error in function: %s. Error closing file!\n", __func__);
+        return errno;
     }
 
     return 0;
@@ -158,7 +164,7 @@ int WriteUserCode (disasm_t* disasm, const char* filename)
 
 int checkSignDisasm (disasm_t* disasm, FILE* file_asm)
 {
-    char asm_sign[MAX_LEN_SIGN] = {};
+    char asm_sign[MaxLen] = {};
 
     fscanf (file_asm, "%3s", asm_sign);
 
@@ -175,10 +181,10 @@ int checkSignDisasm (disasm_t* disasm, FILE* file_asm)
 
 void BufCtor (disasm_t* disasm)
 {
-    disasm->asm_code = (int*) (calloc(disasm->Size, sizeof(int)));
+    disasm->asm_code = (int*) (calloc(disasm->size, sizeof(int)));
     ASSERT (disasm->asm_code != nullptr);
 
-    disasm->buf_code = (char*) (calloc(disasm->Size * MAX_LEN_CMD, sizeof(char)));
+    disasm->buf_code = (char*) (calloc(disasm->size * MAX_LEN_CMD, sizeof(char)));
     ASSERT (disasm->buf_code != nullptr);
 }
 
@@ -186,25 +192,29 @@ void BufCtor (disasm_t* disasm)
 
 int getCodeForDisasm (disasm_t* disasm)
 {
-    FILE* file_asm = fopen (ASM_FILE_NAME_DISASM, "rb");
-    ASSERT (file_asm != nullptr);
+    FILE* fileASM = fopen (ASM_FILE_NAME_DISASM, "rb");
+    ASSERT (fileASM != nullptr);
 
-    if (checkSignDisasm (disasm, file_asm))
+    if (checkSignDisasm (disasm, fileASM))
     {
         return -1;
     }
 
-    fread (&disasm->Size, sizeof(int), 1, file_asm);
+    fread (&disasm->size, sizeof (int), 1, fileASM);
 
     BufCtor (disasm);
 
-    fscanf (file_asm, "\n");
+    fscanf (fileASM, "\n");
 
-    fread (disasm->asm_code, sizeof(int), disasm->Size, file_asm);
+    fread (disasm->asm_code, sizeof (int), disasm->size, fileASM);
 
     printf ("\n");
 
-    fclose (file_asm);
+    if (fclose (fileASM) != 0)
+    {
+        printf ("Error in function: %s. Error closing fileASM!\n", __func__);
+        return errno;
+    }
 
     return 0;
 }

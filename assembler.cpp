@@ -7,9 +7,9 @@
 const char*  VersionFile      = "version.txt";
 size_t       VersionRepeat    = 1024;
 const size_t RegNameMaxLen    = 5;
-const char*  NameFileASM      = "ASM.txt";
+const char*  NameFileASM      = "asm.bin";
 const char*  Signature        = "SGN";
-const char*  InputFileName    = "solveQE.txt";
+const char*  InputFileName    = "quadraticSolver.asm";
 
 //=====================================================================================================================================
 
@@ -89,7 +89,7 @@ int UserCodeToASM (type_buf_char* ptr_user_code, type_buf_structs* ptr_arr_struc
             printf ("FALSE in function: %s.", __func__);
         }
 
-        #include "strcmp_for_asm.h"
+        #include "architecture.h"
 
         else
         {

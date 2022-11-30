@@ -4,7 +4,7 @@
 
 //=====================================================================================================================================
 
-const char*     NameFileCode    = "ASM.txt";    
+const char*     NameFileCode    = "asm.bin";    
 const char*     SignatureCPU    = "SGN";
 const size_t    RamSize         = 5000;
 const size_t    RegSize         = 30;
@@ -45,7 +45,7 @@ int Execute (cpu_t* cpu)
     {
         switch (cpu->code[cpu->ip] & CMD_MASK)
         {
-            #include "strcmp_for_asm.h"
+            #include "architecture.h"
 
             default:
                 printf ("Error in function: %s. Unknown command!\n", __func__);
