@@ -27,7 +27,7 @@
     }                                                        \
 }
 
-#define WRITE_CMD_NUM   {(asm_code->Ptr)[(asm_code->Ip)++] = cmd_code;};
+#define WRITE_CMD_NUM   {(asm_code->ptr)[(asm_code->ip)++] = cmd_code;};
 
 #define WRITE_ARG_JUMP  {FuncJump(cursor, asm_code);};
 

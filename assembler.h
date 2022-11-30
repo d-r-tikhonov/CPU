@@ -16,25 +16,27 @@
 
 //=====================================================================================================================================
 
-const size_t MAX_LEN_LABEL_NAME = 30;
-const size_t MAX_LEN_MASK       = 15;
-const int    MAX_LEN_LINE       = 30;
+const size_t MaxLen           = 30;
 
 //=====================================================================================================================================
 
-typedef struct LABEL
+struct label_field
 {
-    int   Value;
-    char  Name[MAX_LEN_LABEL_NAME];
-} label_field;
+    int   value;
+    char  name[MaxLen];
+};
 
-typedef struct ASM_CODE
+struct asm_t
 {
-    int*         Ptr;
-    size_t       Ip;
-    size_t       Size;
-    label_field* Labels;
-} asm_t;
+    int*   ptr;
+
+    size_t ip;
+    size_t size;
+    
+    label_field* labels;
+};
+
+//=====================================================================================================================================
 
 enum CMD_NAMES
 {
@@ -61,30 +63,28 @@ enum CMD_NAMES
 
 //=====================================================================================================================================
 
-typedef struct prop_line
+struct type_prop_line
 {
     char* Loc;
+
     size_t Len;
-}type_prop_line;
+};
 
-typedef struct buffer_char
+struct type_buf_char
 {
-    char* Ptr;
-    size_t Size;
-    unsigned long int Num_lines;
-}type_buf_char;
+    char* ptr;
 
-typedef struct buffer_ptrs
-{
-    type_prop_line** Ptr;
-    size_t Size;
-}type_buf_ptrs;
+    size_t size;
+    size_t Num_lines;
 
-typedef struct buffer_structs
+};
+
+struct type_buf_structs
 {
-    type_prop_line* Ptr;
-    size_t Size;
-}type_buf_structs;
+    type_prop_line* ptr;
+
+    size_t size;
+};
 
 //=====================================================================================================================================
 
@@ -108,6 +108,9 @@ int     HandleCmdArgs           (int argc, char** argv);
 int     Assemble                (int argc, char** argv);
 int     HandleRegAndNum         (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char* mask1, 
                                 const char* mask2, const char* ram_mask1, const char* ram_mask2);
+
+//=====================================================================================================================================
+
 int     ReadFile                (const char* filename, type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_structs);
 int     ReadInBuffer            (FILE* file, type_buf_char* ptr_text_buf);
 FILE*   OpenReadingFile         (const char* filename); 
@@ -115,10 +118,10 @@ int     MakePointersToLines     (type_buf_char* ptr_text_buf, type_buf_structs* 
 void    CreateArrayStructs      (type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_structs);
 int     FileSize                (FILE* file);
 int     GetAmountsOfLines       (type_buf_char* ptr_text_buf);
-bool    isLetter                (char sym);
 FILE*   OpenWFile               (const char* filename); 
-int     isLineEmpty             (char* ptr_line);
-bool    isEndOfFile             (char sym);
+bool    isLineEmpty             (char* ptr_line);
+bool    isLetter                (char symbol);
+bool    isEndOfFile             (char symbol);
 int     SkipSpace               (char** cursor);
 
 //=====================================================================================================================================

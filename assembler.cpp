@@ -4,23 +4,21 @@
 
 //=====================================================================================================================================
 
+const char*  VersionFile      = "version.txt";
+size_t       VersionRepeat    = 1024;
+const size_t RegNameMaxLen    = 5;
+const char*  NameFileASM      = "ASM.txt";
+const char*  Signature        = "DRT";
+const char*  InputFileName    = "solveQE.txt";
+
+//=====================================================================================================================================
+
 #define DEF_CMD(name, num, arg, ...) \
     else if (!stricmp(cmd, #name))   \
         {                            \
             cmd_code = num;          \
             __VA_ARGS__              \
         }                            \
-
-//=====================================================================================================================================
-
-const char*  VersionFile      = "version.txt";
-size_t       VersionRepeat    = 1024;
-const size_t CmdMaxLen        = 30;
-const size_t LabelsMaxNum     = 30;
-const size_t RegNameMaxLen    = 5;
-const char*  NameFileASM      = "ASM.txt";
-const char*  Signature        = "DRT";
-const char*  InputFileName    = "solveQE.txt";
 
 //=====================================================================================================================================
 
@@ -31,22 +29,22 @@ int Assemble (int argc, char** argv)
     type_buf_char      user_code   = {NULL, 0, 0};
     type_buf_structs   arr_structs = {NULL, 0   };
 
-    label_field labels[LabelsMaxNum] = {};
+    label_field labels[MaxLen] = {};
 
     asm_t asm_code = {NULL, 0, 0, labels};
 
     ReadFile (InputFileName, &user_code, &arr_structs);
 
-    asm_code.Ptr = (int*) calloc (user_code.Num_lines * 3, sizeof (int));
-    ASSERT (asm_code.Ptr != nullptr);
+    asm_code.ptr = (int*) calloc (user_code.Num_lines * 3, sizeof (int));
+    ASSERT (asm_code.ptr != nullptr);
 
     UserCodeToASM (&user_code, &arr_structs, &asm_code);
     UserCodeToASM (&user_code, &arr_structs, &asm_code);
 
-    WriteASM (asm_code.Ptr, NameFileASM, asm_code.Size);
+    WriteASM (asm_code.ptr, NameFileASM, asm_code.size);
 
-    ASSERT (asm_code.Ptr != nullptr);
-    free (asm_code.Ptr);
+    ASSERT (asm_code.ptr != nullptr);
+    free (asm_code.ptr);
 
     return 0;
 }
@@ -55,12 +53,12 @@ int Assemble (int argc, char** argv)
 
 int HandleCmdArgs (int argc, char** argv)
 {
-    for(int args_count = 1; args_count < argc; args_count++)
+    for (int args_count = 1; args_count < argc; args_count++)
     {
         InputFileName = argv[args_count];
     }
 
-    if(argc == 1)
+    if (argc == 1)
     {
         printf ("Name of code file has not been chosen.\n"
                 "The program is going to try to open default file.\n");
@@ -73,15 +71,15 @@ int HandleCmdArgs (int argc, char** argv)
 
 int UserCodeToASM (type_buf_char* ptr_user_code, type_buf_structs* ptr_arr_structs, asm_t* asm_code)
 {
-    asm_code->Ip = 0;
+    asm_code->ip = 0;
 
-    char   cmd[CmdMaxLen]   = "";
+    char   cmd[MaxLen]      = "";
     size_t cmd_code         = 0;
     char*  cursor           = nullptr;
 
     for (size_t i = 0; i < ptr_user_code->Num_lines; i++)
     {
-        cursor = (ptr_arr_structs->Ptr)[i].Loc;
+        cursor = (ptr_arr_structs->ptr)[i].Loc;
         SkipSpace (&cursor);
         sscanf (cursor, "%s", cmd);
         cursor = cursor + strlen ((const char*) cmd);
@@ -102,7 +100,7 @@ int UserCodeToASM (type_buf_char* ptr_user_code, type_buf_structs* ptr_arr_struc
         #undef DEF_CMD
     }
 
-    asm_code->Size = asm_code->Ip;
+    asm_code->size = asm_code->ip;
 
     return 0;
 }
@@ -123,16 +121,12 @@ int SkipSpace (char** cursor)
 
 int SearchLabelByName (label_field* labels, char* name)
 {
-    size_t i = 0;
-
-    while (i < LabelsMaxNum)
+    for (size_t i = 0; i < MaxLen; i++)
     {
-        if (strcmp (labels[i].Name, name) == 0)
+        if (strcmp (labels[i].name, name) == 0)
         {
             return i;
         }
-
-        i++;
     }
 
     printf ("Error in function: %s. Label not found!\n", __func__);
@@ -146,7 +140,7 @@ int FuncLab (char* ptr_arg, asm_t* asm_code)
 {
     size_t num_label = IdentifyNumLabel (ptr_arg, asm_code);
 
-    asm_code->Labels[num_label].Value = (asm_code->Ip) + 1;
+    asm_code->labels[num_label].value = asm_code->ip + 1;
 
     return 0;
 }
@@ -159,7 +153,7 @@ int FuncName (char* ptr_arg, asm_t* asm_code)
 
     size_t num_label = -1;
 
-    char label_name[MAX_LEN_LABEL_NAME] = {};
+    char label_name[MaxLen] = {};
 
     if (sscanf (ptr_arg, "%s", label_name) == 0)
     {
@@ -177,7 +171,7 @@ int FuncName (char* ptr_arg, asm_t* asm_code)
         return -1;
     }
 
-    strcpy (asm_code->Labels[num_label].Name, label_name);
+    strcpy (asm_code->labels[num_label].name, label_name);
 
     return 0;
 }
@@ -188,7 +182,7 @@ int FuncJump (char* ptr_arg, asm_t* asm_code)
 {
     size_t num_label = IdentifyNumLabel (ptr_arg, asm_code);
 
-    (asm_code->Ptr)[(asm_code->Ip)++] = asm_code->Labels[num_label].Value;
+    (asm_code->ptr)[(asm_code->ip)++] = asm_code->labels[num_label].value;
 
     return 0;
 }
@@ -201,21 +195,21 @@ size_t IdentifyNumLabel (char* ptr_arg, asm_t* asm_code)
 
     int num_label = -1;
 
-    if (!(isdigit (*ptr_arg)))
+    if (isdigit (*ptr_arg) == 0)
     {
-        char label_name[MAX_LEN_LABEL_NAME] = {};
+        char label_name[MaxLen] = {};
 
-        if (!(sscanf (ptr_arg, "%s", label_name)))
+        if (sscanf (ptr_arg, "%s", label_name) == 0)
         {
             printf ("Error in function: %s. Label ERROR!\n", __func__);        
             return -1;
         }
 
-        num_label = SearchLabelByName(asm_code->Labels, label_name);
+        num_label = SearchLabelByName (asm_code->labels, label_name);
     }
     else
     {
-        if (!(sscanf(ptr_arg, "%d", &num_label)))
+        if (sscanf (ptr_arg, "%d", &num_label) == 0)
         {
             printf ("Error in function: %s. Label ERROR!\n", __func__);        
             return -1;
@@ -261,11 +255,11 @@ int HandleRegAndNum (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char
     }
     else if (read_res == 2)
     {
-        (asm_code->Ptr)[(asm_code->Ip)++] = cmd_code | ARG_IMMED | ARG_REG;
+        (asm_code->ptr)[(asm_code->ip)++] = cmd_code | ARG_IMMED | ARG_REG;
 
         HandleRegname (asm_code, reg_name);
 
-        asm_code->Ptr[(asm_code->Ip)++] = arg;
+        asm_code->ptr[(asm_code->ip)++] = arg;
 
         return 0;
     }
@@ -296,8 +290,8 @@ int HandleNum (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char* mask
 
     if (read_res == 1)
     {
-        (asm_code->Ptr)[(asm_code->Ip)++] = cmd_code | ARG_IMMED;
-        (asm_code->Ptr)[(asm_code->Ip)++] = arg;
+        (asm_code->ptr)[(asm_code->ip)++] = cmd_code | ARG_IMMED;
+        (asm_code->ptr)[(asm_code->ip)++] = arg;
 
         return 0;
     }
@@ -325,7 +319,7 @@ int HandleReg (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char* mask
 
     if (read_res == 1)
     {
-        (asm_code->Ptr)[(asm_code->Ip)++] = cmd_code | ARG_REG;
+        (asm_code->ptr)[(asm_code->ip)++] = cmd_code | ARG_REG;
 
         HandleRegname (asm_code, reg_name);
 
@@ -378,7 +372,7 @@ int HandleRegname (asm_t* asm_code, char* reg_name)
     }
 
     int reg_num = reg_name[1] - 'a';
-    (asm_code->Ptr)[(asm_code->Ip)++] = reg_num;
+    (asm_code->ptr)[(asm_code->ip)++] = reg_num;
 
     return 0;
 }
@@ -387,14 +381,14 @@ int HandleRegname (asm_t* asm_code, char* reg_name)
 
 int WriteASM (int* ptr_asm, const char* filename, size_t buf_size)
 {
-    FILE* file = OpenWFile (filename);
-    ASSERT (file != nullptr);
+    FILE* stream = OpenWFile (filename);
+    ASSERT (stream != nullptr);
 
-    WriteHead (file, buf_size);
+    WriteHead (stream, buf_size);
     
-    PutBuffer (file, ptr_asm, buf_size);
+    PutBuffer (stream, ptr_asm, buf_size);
 
-    fclose (file);
+    fclose (stream);
 
     return 0;
 }
@@ -432,7 +426,7 @@ size_t ReadVersion (const char* filename)
 
     fread (&version, sizeof (int), 1, versionFile);
 
-    if ((fclose (versionFile)) != 0)
+    if (fclose (versionFile) != 0)
     {
         printf ("Error in function: %s. Error closing versionFile!\n", __func__);
     }
@@ -451,9 +445,10 @@ int UpdateVersion (const char* filename, size_t* ptr_version)
 
     fwrite (ptr_version, sizeof (int), 1, versionFile);
 
-    if ((fclose (versionFile)) != 0)
+    if (fclose (versionFile) != 0)
     {
         printf ("Error in function: %s. Error closing versionFile!\n", __func__);
+        return errno;
     }
 
     return 0;
@@ -472,20 +467,24 @@ int WriteVersion (FILE* file, size_t version)
 
 int ReadFile (const char* filename, type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_structs)
 {
-    FILE* text_file = OpenReadingFile (filename);
+    FILE* stream = OpenReadingFile (filename);
 
-    if (!text_file)
+    if (stream == nullptr)
     {
         return -1;
     }
 
-    ptr_text_buf->Size = FileSize (text_file) + 1;
+    ptr_text_buf->size = FileSize (stream) + 1;
 
-    ptr_text_buf->Ptr = (char*) calloc (ptr_text_buf->Size, sizeof (char));
+    ptr_text_buf->ptr = (char*) calloc (ptr_text_buf->size, sizeof (char));
 
-    ReadInBuffer (text_file, ptr_text_buf);
+    ReadInBuffer (stream, ptr_text_buf);
 
-    fclose (text_file);
+    if (fclose (stream) != 0)
+    {
+        printf ("Error in function: %s.\n", __func__);
+        return errno;
+    }
 
     MakePointersToLines (ptr_text_buf, ptr_arr_structs);
 
@@ -496,10 +495,10 @@ int ReadFile (const char* filename, type_buf_char* ptr_text_buf, type_buf_struct
 
 int ReadInBuffer (FILE* file, type_buf_char* ptr_text_buf)
 {
-    size_t num_read_sym = fread (ptr_text_buf->Ptr, sizeof (char), ptr_text_buf->Size - 1, file);
+    size_t num_read_sym = fread (ptr_text_buf->ptr, sizeof (char), ptr_text_buf->size - 1, file);
     ASSERT (num_read_sym != 0);
 
-    if (ptr_text_buf->Size - 1 != num_read_sym)
+    if (ptr_text_buf->size - 1 != num_read_sym)
     {
         printf ("Error in function: %s.\n", __func__);
         return -1;
@@ -512,15 +511,15 @@ int ReadInBuffer (FILE* file, type_buf_char* ptr_text_buf)
 
 FILE* OpenReadingFile (const char* filename)
 {
-    FILE* readableFile = fopen (filename, "rb");
-
-    if (readableFile == nullptr)
+    FILE* stream = fopen (filename, "rb");
+    
+    if (stream == nullptr)
     {
         printf ("Error in function: %s. Error opening file!\n", __func__);
         return nullptr;
     }
 
-    return readableFile;
+    return stream;
 }
 
 //=====================================================================================================================================
@@ -529,8 +528,8 @@ int MakePointersToLines (type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_
 {
     ptr_text_buf->Num_lines = GetAmountsOfLines (ptr_text_buf);
 
-    ptr_arr_structs->Ptr  = (type_prop_line*) calloc (ptr_text_buf->Num_lines, sizeof (type_prop_line));
-    ptr_arr_structs->Size = ptr_text_buf->Num_lines;
+    ptr_arr_structs->ptr  = (type_prop_line*) calloc (ptr_text_buf->Num_lines, sizeof (type_prop_line));
+    ptr_arr_structs->size = ptr_text_buf->Num_lines;
 
     CreateArrayStructs (ptr_text_buf, ptr_arr_structs);
 
@@ -541,22 +540,22 @@ int MakePointersToLines (type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_
 
 void CreateArrayStructs (type_buf_char* ptr_text_buf, type_buf_structs* ptr_arr_structs)
 {
-    unsigned long int index_line = 0;
+    size_t index_line = 0;
 
-    char* ptr_prev_line = ptr_text_buf->Ptr;
+    char* ptr_prev_line = ptr_text_buf->ptr;
 
-    for (size_t i = 0; i < ptr_text_buf->Size; i++)
+    for (size_t i = 0; i < ptr_text_buf->size; i++)
     {
-        if (isEndOfFile ((ptr_text_buf->Ptr)[i]) == 1)
+        if (isEndOfFile (ptr_text_buf->ptr[i]) == 1)
         {
             if (isLineEmpty (ptr_prev_line) == 0)
             {
-                ptr_arr_structs->Ptr[index_line] = {ptr_prev_line, (ptr_text_buf->Ptr) + i - ptr_prev_line};
+                ptr_arr_structs->ptr[index_line] = {ptr_prev_line, (ptr_text_buf->ptr) + i - ptr_prev_line};
 
                 index_line++;
             }
 
-            ptr_prev_line = (ptr_text_buf->Ptr) + i + 1;
+            ptr_prev_line = (ptr_text_buf->ptr) + i + 1;
         }
     }
 }
@@ -583,18 +582,18 @@ int GetAmountsOfLines (type_buf_char* ptr_text_buf)
 
     size_t num_lines = 0;
 
-    char* ptr_prev_line = ptr_text_buf->Ptr;
+    char* ptr_prev_line = ptr_text_buf->ptr;
 
-    for (size_t i = 0; i < ptr_text_buf->Size; i++)
+    for (size_t i = 0; i < ptr_text_buf->size; i++)
     {
-        if (*(ptr_text_buf->Ptr + i) == '\n')
+        if (*(ptr_text_buf->ptr + i) == '\n')
         {
             if (!isLineEmpty(ptr_prev_line))
             {
                 num_lines++;
             }
 
-            ptr_prev_line = ptr_text_buf->Ptr + i + 1;
+            ptr_prev_line = ptr_text_buf->ptr + i + 1;
         }
     }
 
@@ -610,9 +609,9 @@ int GetAmountsOfLines (type_buf_char* ptr_text_buf)
 
 //=====================================================================================================================================
 
-bool isLetter (char sym)
+bool isLetter (char symbol)
 {
-    if (('a' <= sym && sym <= 'z') || ('A' <= sym && sym <= 'Z'))
+    if (('a' <= symbol && symbol <= 'z') || ('A' <= symbol && symbol <= 'Z'))
     {
         return true;
     }
@@ -628,6 +627,7 @@ FILE* OpenWFile (const char* filename)
 
     if (stream == nullptr)
     {
+        printf ("Error in function: %s. Error opening file!\n", __func__);
         return nullptr;
     }
 
@@ -650,9 +650,9 @@ int PutBuffer (FILE* w_file, int* ptr_asm, size_t buf_size)
 
 //=====================================================================================================================================
 
-int isLineEmpty (char* ptr_line)
+bool isLineEmpty (char* ptr_line)
 {
-    while (!(isEndOfFile (*ptr_line)))
+    while (isEndOfFile (*ptr_line) == 0)
     {
         if (isLetter (*ptr_line))
         {
@@ -667,9 +667,9 @@ int isLineEmpty (char* ptr_line)
 
 //=====================================================================================================================================
 
-bool isEndOfFile (char sym)
+bool isEndOfFile (char symbol)
 {
-    return (sym == '\0' || sym == '\n' || sym == '\r') ? true : false;
+    return (symbol == '\0' || symbol == '\n' || symbol == '\r') ? true : false;
 }
 
 //=====================================================================================================================================

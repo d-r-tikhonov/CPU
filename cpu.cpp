@@ -72,6 +72,8 @@ void SkipNewLines ()
     }          
 }
 
+//=====================================================================================================================================
+
 void PrintRAM (size_t format, CPU* cpu, size_t len_line)
 {
     int* ptr_RAM = cpu->RAM;
@@ -220,12 +222,12 @@ int checkSign (CPU* cpu, FILE* file_asm)
         return WRONG_SIGNATURE;
     }
 
-    size_t right_version = ReadVersion (VersionFile);
-    size_t gachi_version = 0;
+    size_t rightVersion = ReadVersion (VersionFile);
+    size_t currentVersion = 0;
 
-    fread (&gachi_version, sizeof(int), 1, file_asm);
+    fread (&currentVersion, sizeof(int), 1, file_asm);
 
-    if (right_version != gachi_version)
+    if (rightVersion != currentVersion)
     {
         printf ("Error in function: %s. Version error!\n", __func__);
         return -1;

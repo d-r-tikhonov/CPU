@@ -27,6 +27,8 @@
     }                                                        \
 }
 
+//=====================================================================================================================================
+
 DEF_CMD(HLT, 0, 0,
 {
     return 0;
@@ -72,7 +74,7 @@ DEF_CMD(DIV, 6, 0,
 
     if (a == 0)
     {
-        printf("ZERO DIVISION ERROR: can't divide by zero\n");
+        printf ("ZERO DIVISION ERROR: can't divide by zero\n");
         return ZERO_DIVISION;
     }
     else
@@ -103,8 +105,11 @@ DEF_CMD(IN, 7, 0,
 DEF_CMD(OUT, 8, 0,
 {
     double val = DO_POP;
-    if (floor(val) == val)          printf("Out print is %d \n", (int)val);
-    else                            printf("Out print is %lg\n",      val);
+
+    if (floor (val) == val)          
+        printf("Out print is %lg \n", val);
+    else                            
+        printf("Out print is %lg\n", val);
 })
 
 DEF_CMD(JUMP, 9, 1,
