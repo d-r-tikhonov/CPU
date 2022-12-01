@@ -5,13 +5,13 @@
 
 #define DO_JUMP        {cpu->ip = cpu->code[(cpu->ip)+1] - 2;}
 
-#define DO_POP         ({(double)StackPop(stk) / Accuracy;})
+#define DO_POP         ({(double) StackPop (stk) / Accuracy;})
 
-#define DO_PUSH(arg)   StackPush(stk, (arg) * Accuracy);
+#define DO_PUSH(arg)   StackPush (stk, (arg) * Accuracy);
 
-#define REMEMBER_CALL  {StackPush(cpu->stkCalls, cpu->ip);};
+#define REMEMBER_CALL  {StackPush (cpu->stkCalls, cpu->ip);};
 
-#define RETURN_TO_CALL {cpu->ip = StackPop(cpu->stkCalls) + 1;};
+#define RETURN_TO_CALL {cpu->ip = StackPop (cpu->stkCalls) + 1;};
 
 #define SKIP_ARG       {(cpu->ip)++;};
 
@@ -29,15 +29,17 @@
 
 #define WRITE_CMD_NUM   {(asm_code->ptr)[(asm_code->ip)++] = cmd_code;};
 
-#define WRITE_ARG_JUMP  {FuncJump(cursor, asm_code);};
+#define WRITE_ARG_JUMP  {FuncJump (cursor, asm_code);};
 
-#define WRITE_STACK_ARG {PutArg(cmd_code, cursor, asm_code);};
+#define WRITE_STACK_ARG {PutArg (cmd_code, cursor, asm_code);};
 
 #define WRITE_JUMP                                                           \
 {                                                                            \
     WRITE_CMD_NUM;                                                           \
     WRITE_ARG_JUMP;                                                          \
 }
+
+//=====================================================================================================================================
 
 DEF_CMD(HLT, 0, 0,
 #ifndef RUN_MODE
@@ -117,7 +119,7 @@ DEF_CMD(DIV , 6, 0,
 
     if (a == 0)
     {
-        printf ("ZERO DIVISION ERROR: can't divide by zero\n");
+        printf ("Error: can't divide by zero!\n");
         return ZERO_DIVISION;
     }
     else
@@ -133,13 +135,13 @@ DEF_CMD(IN  , 7, 0,
     WRITE_CMD_NUM;
 #else
 {
-    printf ("enter a number: ");
+    printf ("Enter a number: ");
 
     int value = 0;
 
     while (!scanf("%d", &value))
     {
-        printf ("please, enter a fucking number:\n");
+        printf ("It's not a number! Please, enter a number:\n");
         SkipNewLines ();
     }
 
@@ -157,8 +159,8 @@ DEF_CMD(OUT , 8, 0,
 {
     double val = DO_POP;
 
-    if (floor(val) == val)          printf("Out print is %d \n", (int)val);
-    else                            printf("Out print is %lg\n",      val);
+    if (floor (val) == val)  printf ("Return value is %d \n", (int) val);
+    else                    printf ("Return value is %lg\n",       val);
 };
 #endif
 )
@@ -236,7 +238,7 @@ DEF_CMD(JNE, 15, 1,
 DEF_CMD(NAME, 16, 0,
 #ifndef RUN_MODE
 {
-    FuncName(cursor, asm_code);
+    FuncName (cursor, asm_code);
 }
 #endif
 )
@@ -245,7 +247,7 @@ DEF_CMD(NAME, 16, 0,
 DEF_CMD(LBL , 17, 0,
 #ifndef RUN_MODE
 {
-    FuncLab(cursor, asm_code);
+    FuncLab (cursor, asm_code);
 }
 #endif
 )
@@ -255,7 +257,7 @@ DEF_CMD(DRAW, 18, 0,
     WRITE_CMD_NUM;
 #else
 {
-    PrintRAM(BIN_FORMAT, cpu, 100);
+    PrintRAM (BIN_FORMAT, cpu, 100);
 };
 #endif
 )
@@ -301,7 +303,7 @@ DEF_CMD(SQRT, 22, 0,
 #else
 {
     double val = DO_POP;
-    double sqrt_val = sqrt(val);
+    double sqrt_val = sqrt (val);
 
     DO_PUSH(sqrt_val);
 };
@@ -314,7 +316,7 @@ DEF_CMD(CLEAR, 23, 0,
 #else
 {
 #ifdef TX_NECESSARY
-    txClearConsole();
+    txClearConsole ();
 #endif
 ;
 };
