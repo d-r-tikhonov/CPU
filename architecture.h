@@ -159,8 +159,10 @@ DEF_CMD(OUT , 8, 0,
 {
     double val = DO_POP;
 
-    if (floor (val) == val)  printf ("Return value is %d \n", (int) val);
-    else                    printf ("Return value is %lg\n",       val);
+    if (floor (val) == val)  
+        printf ("Return value is %d \n", (int) val);
+    else                    
+        printf ("Return value is %lg\n",       val);
 };
 #endif
 )
@@ -318,7 +320,6 @@ DEF_CMD(CLEAR, 23, 0,
 #ifdef TX_NECESSARY
     txClearConsole ();
 #endif
-;
 };
 #endif
 )

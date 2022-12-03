@@ -1,5 +1,7 @@
 //=====================================================================================================================================
 
+#include <TXLib.h>
+
 #include "assembler.h"
 #include "cpu.h"
 #include "disassembler.h"
@@ -11,8 +13,6 @@ int main (int argc, char* argv[])
     Assemble (argc, argv);
 
     Run ();
-
-    MakeReadableCode ();
 
     return 0;
 }

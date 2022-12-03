@@ -136,9 +136,9 @@ int SearchLabelByName (label_field* labels, char* name)
 
 //=====================================================================================================================================
 
-int FuncLab (char* ptr_arg, asm_t* asm_code)
+int FuncLab (char* argPtr, asm_t* asm_code)
 {
-    size_t num_label = IdentifyNumLabel (ptr_arg, asm_code);
+    size_t num_label = IdentifyNumLabel (argPtr, asm_code);
 
     asm_code->labels[num_label].value = asm_code->ip + 1;
 
@@ -147,25 +147,25 @@ int FuncLab (char* ptr_arg, asm_t* asm_code)
 
 //=====================================================================================================================================
 
-int FuncName (char* ptr_arg, asm_t* asm_code)
+int FuncName (char* argPtr, asm_t* asm_code)
 {
-    SkipSpace (&ptr_arg);
+    SkipSpace (&argPtr);
 
     size_t num_label = -1;
 
     char label_name[MaxLen] = {};
 
-    if (sscanf (ptr_arg, "%s", label_name) == 0)
+    if (sscanf (argPtr, "%s", label_name) == 0)
     {
         printf ("Error in function: %s. Label ERROR!\n", __func__);
         return -1;
     }
 
-    SkipSpace (&ptr_arg);
+    SkipSpace (&argPtr);
 
-    ptr_arg += strlen ((const char*)label_name);
+    argPtr += strlen ((const char*)label_name);
 
-    if (sscanf (ptr_arg, "%llu", &num_label) == 0)
+    if (sscanf (argPtr, "%llu", &num_label) == 0)
     {
         printf ("Error in function: %s. Label ERROR!\n", __func__);        
         return -1;
@@ -178,9 +178,9 @@ int FuncName (char* ptr_arg, asm_t* asm_code)
 
 //=====================================================================================================================================
 
-int FuncJump (char* ptr_arg, asm_t* asm_code)
+int FuncJump (char* argPtr, asm_t* asm_code)
 {
-    size_t num_label = IdentifyNumLabel (ptr_arg, asm_code);
+    size_t num_label = IdentifyNumLabel (argPtr, asm_code);
 
     (asm_code->ptr)[(asm_code->ip)++] = asm_code->labels[num_label].value;
 
@@ -189,46 +189,46 @@ int FuncJump (char* ptr_arg, asm_t* asm_code)
 
 //=====================================================================================================================================
 
-size_t IdentifyNumLabel (char* ptr_arg, asm_t* asm_code)
+size_t IdentifyNumLabel (char* argPtr, asm_t* asm_code)
 {
-    SkipSpace (&ptr_arg);
+    SkipSpace (&argPtr);
 
-    int num_label = -1;
+    int numLabel = -1;
 
-    if (isdigit (*ptr_arg) == 0)
+    if (isdigit (*argPtr) == 0)
     {
         char label_name[MaxLen] = {};
 
-        if (sscanf (ptr_arg, "%s", label_name) == 0)
+        if (sscanf (argPtr, "%s", label_name) == 0)
         {
             printf ("Error in function: %s. Label ERROR!\n", __func__);        
             return -1;
         }
 
-        num_label = SearchLabelByName (asm_code->labels, label_name);
+        numLabel = SearchLabelByName (asm_code->labels, label_name);
     }
     else
     {
-        if (sscanf (ptr_arg, "%d", &num_label) == 0)
+        if (sscanf (argPtr, "%d", &numLabel) == 0)
         {
             printf ("Error in function: %s. Label ERROR!\n", __func__);        
             return -1;
         }
     }
 
-    ASSERT (num_label != -1);
+    ASSERT (numLabel != -1);
 
-    if (num_label == -1)
+    if (numLabel == -1)
     {
         return -1;
     }
 
-    return num_label;
+    return numLabel;
 }
 
 //=====================================================================================================================================
 
-int HandleRegAndNum (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char* mask1, const char* mask2, 
+int HandleRegAndNum (asm_t* asm_code, size_t cmd_code, char* argPtr, const char* mask1, const char* mask2, 
                     const char* ram_mask1, const char* ram_mask2)
 {
     int  arg      = 0;
@@ -236,14 +236,14 @@ int HandleRegAndNum (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char
 
     char reg_name[RegNameMaxLen] = {};
 
-    if ((read_res = sscanf (ptr_arg, ram_mask1, &arg, reg_name)) == 1)
+    if ((read_res = sscanf (argPtr, ram_mask1, &arg, reg_name)) == 1)
     {
         cmd_code |= ARG_RAM;
     }
 
     if (read_res < 2)
     {
-        if ((read_res = sscanf (ptr_arg, ram_mask2, reg_name, &arg)) == 1)    
+        if ((read_res = sscanf (argPtr, ram_mask2, reg_name, &arg)) == 1)    
         {
             cmd_code |= ARG_RAM;
         }
@@ -251,7 +251,7 @@ int HandleRegAndNum (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char
 
     if (read_res < 2)
     {
-        read_res = sscanf (ptr_arg, mask1, &arg, reg_name);
+        read_res = sscanf (argPtr, mask1, &arg, reg_name);
     }
     else if (read_res == 2)
     {
@@ -265,7 +265,7 @@ int HandleRegAndNum (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char
     }
     else
     {
-        read_res = sscanf (ptr_arg, mask2, reg_name, &arg);
+        read_res = sscanf (argPtr, mask2, reg_name, &arg);
     }
 
     return 1;
@@ -273,22 +273,22 @@ int HandleRegAndNum (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char
 
 //=====================================================================================================================================
 
-int HandleNum (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char* mask1, const char* ram_mask1)
+int HandleNum (asm_t* asm_code, size_t cmd_code, char* argPtr, const char* mask1, const char* ram_mask1)
 {
-    int  arg      = 0;
-    int  read_res = 0;
+    int  arg        = 0;
+    int  readResult = 0;
 
-    if ((read_res = sscanf (ptr_arg, ram_mask1, &arg)) == 1)        
+    if ((readResult = sscanf (argPtr, ram_mask1, &arg)) == 1)        
     {
         cmd_code |= ARG_RAM;
     }
 
-    if (read_res < 1)
+    if (readResult < 1)
     {
-        read_res = sscanf (ptr_arg, mask1, &arg);
+        readResult = sscanf (argPtr, mask1, &arg);
     }
 
-    if (read_res == 1)
+    if (readResult == 1)
     {
         (asm_code->ptr)[(asm_code->ip)++] = cmd_code | ARG_IMMED;
         (asm_code->ptr)[(asm_code->ip)++] = arg;
@@ -301,23 +301,23 @@ int HandleNum (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char* mask
 
 //=====================================================================================================================================
 
-int HandleReg (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char* mask1, const char* ram_mask1)
+int HandleReg (asm_t* asm_code, size_t cmd_code, char* argPtr, const char* mask1, const char* ram_mask1)
 {
-    int  read_res = 0;
+    int  readResult = 0;
 
     char reg_name[RegNameMaxLen] = {};
 
-    if ((read_res = sscanf (ptr_arg, ram_mask1, reg_name)) == 1)        
+    if ((readResult = sscanf (argPtr, ram_mask1, reg_name)) == 1)        
     {
         cmd_code |= ARG_RAM;
     }
 
-    if (read_res < 1)
+    if (readResult < 1)
     {
-        read_res = sscanf (ptr_arg, mask1, reg_name);
+        readResult = sscanf (argPtr, mask1, reg_name);
     }
 
-    if (read_res == 1)
+    if (readResult == 1)
     {
         (asm_code->ptr)[(asm_code->ip)++] = cmd_code | ARG_REG;
 
@@ -331,30 +331,30 @@ int HandleReg (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char* mask
 
 //=====================================================================================================================================
 
-elem_t PutArg (size_t cmd_code, char* ptr_arg, asm_t* asm_code)
+elem_t PutArg (size_t cmd_code, char* argPtr, asm_t* asm_code)
 {
-    ASSERT (ptr_arg != nullptr);
+    ASSERT (argPtr != nullptr);
 
-    int  read_res = 0;
+    int  readResult = 0;
 
-    SkipSpace (&ptr_arg);
+    SkipSpace (&argPtr);
 
-    read_res = HandleRegAndNum (asm_code, cmd_code, ptr_arg, "%d+%[a-z]", "%[a-z]+%d", "[%d+%[a-z]]", "[%[a-z]+%d]");
+    readResult = HandleRegAndNum (asm_code, cmd_code, argPtr, "%d+%[a-z]", "%[a-z]+%d", "[%d+%[a-z]]", "[%[a-z]+%d]");
 
-    if (!read_res)
+    if (!readResult)
     {
         return 0;
     }
 
-    read_res = HandleNum (asm_code, cmd_code, ptr_arg, "%d", "[%d]");
+    readResult = HandleNum (asm_code, cmd_code, argPtr, "%d", "[%d]");
 
-    if (!read_res)
+    if (!readResult)
     {
         return 0;
     }
 
-    read_res = HandleReg (asm_code, cmd_code, ptr_arg, "%[a-z]", "[%[a-z]]");
-    if (!read_res) 
+    readResult = HandleReg (asm_code, cmd_code, argPtr, "%[a-z]", "[%[a-z]]");
+    if (!readResult) 
     {
         return 0;
     }
@@ -379,14 +379,14 @@ int HandleRegname (asm_t* asm_code, char* reg_name)
 
 //=====================================================================================================================================
 
-int WriteASM (int* ptr_asm, const char* filename, size_t buf_size)
+int WriteASM (int* asmPtr, const char* fileName, size_t bufferSize)
 {
-    FILE* stream = OpenWFile (filename);
+    FILE* stream = OpenWFile (fileName);
     ASSERT (stream != nullptr);
 
-    WriteHead (stream, buf_size);
+    WriteHead (stream, bufferSize);
     
-    PutBuffer (stream, ptr_asm, buf_size);
+    PutBuffer (stream, asmPtr, bufferSize);
 
     if (fclose (stream) != 0)
     {
@@ -399,7 +399,7 @@ int WriteASM (int* ptr_asm, const char* filename, size_t buf_size)
 
 //=====================================================================================================================================
 
-int WriteHead (FILE* file, size_t buf_size)
+int WriteHead (FILE* file, size_t bufferSize)
 {
     fwrite (Signature, sizeof (char), strlen (Signature), file);
 
@@ -409,7 +409,7 @@ int WriteHead (FILE* file, size_t buf_size)
 
     WriteVersion (file, version);
 
-    fwrite (&buf_size, sizeof (int), 1, file);
+    fwrite (&bufferSize, sizeof (int), 1, file);
 
     return 0;
 }
@@ -441,14 +441,14 @@ size_t ReadVersion (const char* filename)
 
 //=====================================================================================================================================
 
-int UpdateVersion (const char* filename, size_t* ptr_version)
+int UpdateVersion (const char* filename, size_t* versionPtr)
 {
-    *ptr_version = (*ptr_version + 1) % VersionRepeat;
+    *versionPtr = (*versionPtr + 1) % VersionRepeat;
 
     FILE* versionFile = OpenWFile (filename);
     ASSERT (versionFile != nullptr);
 
-    fwrite (ptr_version, sizeof (int), 1, versionFile);
+    fwrite (versionPtr, sizeof (int), 1, versionFile);
 
     if (fclose (versionFile) != 0)
     {
@@ -641,11 +641,11 @@ FILE* OpenWFile (const char* filename)
 
 //=====================================================================================================================================
 
-int PutBuffer (FILE* w_file, int* ptr_asm, size_t buf_size)
+int PutBuffer (FILE* w_file, int* ptr_asm, size_t bufferSize)
 {
-    size_t num_written_sym = fwrite (ptr_asm, sizeof (int), buf_size, w_file);
+    size_t num_written_sym = fwrite (ptr_asm, sizeof (int), bufferSize, w_file);
 
-    if (num_written_sym != buf_size)
+    if (num_written_sym != bufferSize)
     {
         return -1;
     }
@@ -661,13 +661,13 @@ bool isLineEmpty (char* ptr_line)
     {
         if (isLetter (*ptr_line))
         {
-            return 0;
+            return false;
         }
 
         ptr_line++;
     }
 
-    return 1;
+    return true;
 }
 
 //=====================================================================================================================================

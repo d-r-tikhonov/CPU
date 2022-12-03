@@ -16,7 +16,7 @@
 
 //=====================================================================================================================================
 
-const size_t MaxLen           = 30;
+const size_t MaxLen = 30;
 
 //=====================================================================================================================================
 
@@ -88,25 +88,25 @@ struct type_buf_structs
 
 //=====================================================================================================================================
 
-int     HandleNum               (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char* mask1, const char* ram_mask1);
-int     HandleReg               (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char* mask1, const char* ram_mask1);
-elem_t  PutArg                  (size_t cmd_code, char* ptr_arg, asm_t* asm_code);
+int     HandleNum               (asm_t* asm_code, size_t cmd_code, char* argPtr, const char* mask1, const char* ram_mask1);
+int     HandleReg               (asm_t* asm_code, size_t cmd_code, char* argPtr, const char* mask1, const char* ram_mask1);
+elem_t  PutArg                  (size_t cmd_code, char* argPtr, asm_t* asm_code);
 int     HandleRegname           (asm_t* asm_code, char* reg_name);
 int     SearchLabelByName       (label_field* labels, char* name);
 int     UserCodeToASM           (type_buf_char* ptr_user_code, type_buf_structs* ptr_arr_structs, asm_t* asm_code);
-int     FuncName                (char* ptr_arg, asm_t* asm_code);
-int     FuncJump                (char* ptr_arg, asm_t* asm_code);
-int     FuncLab                 (char* ptr_arg, asm_t* asm_code);
-size_t  IdentifyNumLabel        (char* ptr_arg, asm_t* asm_code);
-int     WriteASM                (int* ptr_asm, const char* filename, size_t buf_size);
-int     WriteHead               (FILE* file, size_t buf_size);
-int     PutBuffer               (FILE* w_file, int* ptr_asm, size_t buf_size);
+int     FuncName                (char* argPtr, asm_t* asm_code);
+int     FuncJump                (char* argPtr, asm_t* asm_code);
+int     FuncLab                 (char* argPtr, asm_t* asm_code);
+size_t  IdentifyNumLabel        (char* argPtr, asm_t* asm_code);
+int     WriteASM                (int* asmPtr, const char* fileName, size_t bufferSize);
+int     WriteHead               (FILE* file, size_t bufferSize);
+int     PutBuffer               (FILE* w_file, int* ptr_asm, size_t bufferSize);
 size_t  ReadVersion             (const char* filename);
-int     UpdateVersion           (const char* filename, size_t* ptr_version);
+int     UpdateVersion           (const char* filename, size_t* versionPtr);
 int     WriteVersion            (FILE* file, size_t version);
 int     HandleCmdArgs           (int argc, char** argv);
 int     Assemble                (int argc, char** argv);
-int     HandleRegAndNum         (asm_t* asm_code, size_t cmd_code, char* ptr_arg, const char* mask1, 
+int     HandleRegAndNum         (asm_t* asm_code, size_t cmd_code, char* argPtr, const char* mask1, 
                                 const char* mask2, const char* ram_mask1, const char* ram_mask2);
 
 //=====================================================================================================================================

@@ -32,7 +32,7 @@
 //=====================================================================================================================================
 
 const char* DISASM_SIGNATURE        = "SGN";
-const char* ASM_FILE_NAME_DISASM    = "asm.bin  ";
+const char* ASM_FILE_NAME_DISASM    = "asm.bin";
 const int   MAX_LEN_CMD             = 6;
 
 //=====================================================================================================================================
@@ -45,18 +45,18 @@ int MakeReadableCode ()
 
     Disassemble (&disasm);
 
-    WriteUserCode (&disasm, "Disassembled.txt");
+    WriteUserCode (&disasm, "disassembled.asm");
 
     return 0;
 }
 
 //=====================================================================================================================================
 
-int PutCmd (disasm_t* disasm, const char* cmd_name)
+int PutCmd (disasm_t* disasm, const char* cmdName)
 {
-    strcpy (disasm->buf_code + disasm->cursor, cmd_name);
+    strcpy (disasm->buf_code + disasm->cursor, cmdName);
 
-    disasm->cursor = disasm->cursor + strlen (cmd_name);
+    disasm->cursor = disasm->cursor + strlen (cmdName);
     disasm->buf_code[disasm->cursor++] = ' ';
 
     return 0;
@@ -64,15 +64,15 @@ int PutCmd (disasm_t* disasm, const char* cmd_name)
 
 //=====================================================================================================================================
 
-int HandleRegsDisasm (disasm_t* disasm, size_t reg_num)
+int HandleRegsDisasm (disasm_t* disasm, size_t regNum)
 {
-    char reg_name[MAX_LEN_REG_NAME] = {'r', 'z', 'x'};
+    char regName[MAX_LEN_REG_NAME] = {'r', 'z', 'x'};
 
-    reg_name[1] = (char)(reg_num + (int)'a');
+    regName[1] = (char) (regNum + (int) 'a');
 
-    strcpy (disasm->buf_code + disasm->cursor, reg_name);
+    strcpy (disasm->buf_code + disasm->cursor, regName);
 
-    disasm->cursor = disasm->cursor + strlen (reg_name);
+    disasm->cursor = disasm->cursor + strlen (regName);
 
     return 0;
 }
@@ -95,7 +95,10 @@ int PutStackCmd (disasm_t* disasm)
 
     size_t cmd_ip = disasm->ip++;
 
-    if (disasm->asm_code[cmd_ip] & ARG_RAM)   disasm->buf_code[disasm->cursor++] = '[';
+    if (disasm->asm_code[cmd_ip] & ARG_RAM)
+    {
+        disasm->buf_code[disasm->cursor++] = '[';
+    }
 
     if (disasm->asm_code[cmd_ip] & ARG_REG)
     {
@@ -138,9 +141,9 @@ int Disassemble (disasm_t* disasm)
 
 //=====================================================================================================================================
 
-int WriteUserCode (disasm_t* disasm, const char* filename)
+int WriteUserCode (disasm_t* disasm, const char* fileName)
 {
-    FILE* stream = fopen (filename, "wb");
+    FILE* stream = fopen (fileName, "wb");
     ASSERT (stream != nullptr);
 
     size_t num_written_sym = fwrite (disasm->buf_code, sizeof (char), disasm->cursor + 1, stream);
@@ -162,11 +165,11 @@ int WriteUserCode (disasm_t* disasm, const char* filename)
 
 //=====================================================================================================================================
 
-int checkSignDisasm (disasm_t* disasm, FILE* file_asm)
+int checkSignDisasm (disasm_t* disasm, FILE* fileASM)
 {
     char asm_sign[MaxLen] = {};
 
-    fscanf (file_asm, "%3s", asm_sign);
+    fscanf (fileASM, "%3s", asm_sign);
 
     if (strcmp (asm_sign, disasm->signature))
     {

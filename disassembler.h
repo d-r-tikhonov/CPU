@@ -24,13 +24,13 @@ const size_t MAX_LEN_REG_NAME = 5;
 //=====================================================================================================================================
 
 int     MakeReadableCode    ();
-int     PutCmd              (disasm_t* disasm, const char* cmd_name);
-int     HandleRegsDisasm    (disasm_t* disasm, size_t reg_num);
+int     PutCmd              (disasm_t* disasm, const char* cmdName);
+int     HandleRegsDisasm    (disasm_t* disasm, size_t regNum);
 int     PutStackCmd         (disasm_t* disasm);
 int     Disassemble         (disasm_t* disasm);
-int     WriteUserCode       (disasm_t* disasm, const char* filename);
+int     WriteUserCode       (disasm_t* disasm, const char* fileName);
 int     PutNumToCharBuf     (disasm_t* disasm);
-int     checkSignDisasm     (disasm_t* disasm, FILE* file_asm);
+int     checkSignDisasm     (disasm_t* disasm, FILE* fileASM);
 void    BufCtor             (disasm_t* disasm);
 int     getCodeForDisasm    (disasm_t* disasm);
 
