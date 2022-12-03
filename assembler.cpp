@@ -364,14 +364,14 @@ elem_t PutArg (size_t cmd_code, char* argPtr, asm_t* asm_code)
 
 //=====================================================================================================================================
 
-int HandleRegname (asm_t* asm_code, char* reg_name)
+int HandleRegname (asm_t* asm_code, char* regName)
 {
-    if (reg_name[0] != 'r' || reg_name[2] != 'x')
+    if (regName[0] != 'r' || regName[2] != 'x')
     {
         printf ("Error in function: %s. Syntax error: register is incorrect!\n", __func__);
     }
 
-    int reg_num = reg_name[1] - 'a';
+    int reg_num = regName[1] - 'a';
     (asm_code->ptr)[(asm_code->ip)++] = reg_num;
 
     return 0;
@@ -416,9 +416,9 @@ int WriteHead (FILE* file, size_t bufferSize)
 
 //=====================================================================================================================================
 
-size_t ReadVersion (const char* filename)
+size_t ReadVersion (const char* fileName)
 {
-    FILE* versionFile = OpenReadingFile (filename);
+    FILE* versionFile = OpenReadingFile (fileName);
 
     if (versionFile == nullptr)
     {
@@ -441,11 +441,11 @@ size_t ReadVersion (const char* filename)
 
 //=====================================================================================================================================
 
-int UpdateVersion (const char* filename, size_t* versionPtr)
+int UpdateVersion (const char* fileName, size_t* versionPtr)
 {
     *versionPtr = (*versionPtr + 1) % VersionRepeat;
 
-    FILE* versionFile = OpenWFile (filename);
+    FILE* versionFile = OpenWFile (fileName);
     ASSERT (versionFile != nullptr);
 
     fwrite (versionPtr, sizeof (int), 1, versionFile);
@@ -641,11 +641,11 @@ FILE* OpenWFile (const char* filename)
 
 //=====================================================================================================================================
 
-int PutBuffer (FILE* w_file, int* ptr_asm, size_t bufferSize)
+int PutBuffer (FILE* stream, int* asmPtr, size_t bufferSize)
 {
-    size_t num_written_sym = fwrite (ptr_asm, sizeof (int), bufferSize, w_file);
+    size_t countSymbols = fwrite (asmPtr, sizeof (int), bufferSize, stream);
 
-    if (num_written_sym != bufferSize)
+    if (countSymbols != bufferSize)
     {
         return -1;
     }

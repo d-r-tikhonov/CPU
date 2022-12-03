@@ -74,38 +74,38 @@ void SkipNewLines ()
 
 //=====================================================================================================================================
 
-void PrintRAM (size_t format, cpu_t* cpu, size_t len_line)
+void PrintRAM (size_t format, cpu_t* cpu, size_t lineLen)
 {
-    int* ptr_RAM = cpu->RAM;
+    int* ptrRAM = cpu->RAM;
 
     switch (format)
     {
         case BIN_FORMAT:
         {
-            size_t screen_size = RamSize + RamSize / len_line + 1;
+            size_t screenSize = RamSize + RamSize / lineLen + 1;
 
-            char* screen = (char*) calloc (screen_size, sizeof (char));
+            char* screen = (char*) calloc (screenSize, sizeof (char));
 
-            size_t screen_index = 0;
+            size_t screenIndex = 0;
 
             for (size_t i = 0; i < RamSize; i++)
             {
-                if (i % len_line == 0)
+                if (i % lineLen == 0)
                 {
-                    screen[screen_index] = '\n';
-                    screen_index++;
+                    screen[screenIndex] = '\n';
+                    screenIndex++;
                 }
 
-                if (ptr_RAM[i])
-                    screen[screen_index] = '#';
+                if (ptrRAM[i])
+                    screen[screenIndex] = '#';
                 else
-                    screen[screen_index] = '.';
+                    screen[screenIndex] = '.';
 
-                screen_index++;
+                screenIndex++;
             }
 
-            screen[screen_index] = '\0';
-            fwrite (screen, sizeof(char), screen_size, stdout);
+            screen[screenIndex] = '\0';
+            fwrite (screen, sizeof (char), screenSize, stdout);
 
             break;
         }
@@ -114,12 +114,12 @@ void PrintRAM (size_t format, cpu_t* cpu, size_t len_line)
         {
             for (size_t i = 0; i < RamSize; i++)
             {
-                if (i % len_line == 0)
+                if (i % lineLen == 0)
                 {
                     printf ("\n");
                 }
 
-                printf ("%c", ptr_RAM[i]);
+                printf ("%c", ptrRAM[i]);
             }
             break;
         }

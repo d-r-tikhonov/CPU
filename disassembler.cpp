@@ -93,24 +93,24 @@ int PutNumToCharBuf (disasm_t* disasm)
 int PutStackCmd (disasm_t* disasm)
 {
 
-    size_t cmd_ip = disasm->ip++;
+    size_t cmdIP = disasm->ip++;
 
-    if (disasm->asm_code[cmd_ip] & ARG_RAM)
+    if (disasm->asm_code[cmdIP] & ARG_RAM)
     {
         disasm->buf_code[disasm->cursor++] = '[';
     }
 
-    if (disasm->asm_code[cmd_ip] & ARG_REG)
+    if (disasm->asm_code[cmdIP] & ARG_REG)
     {
         HandleRegsDisasm (disasm, (disasm->asm_code)[disasm->ip++]);
     }
 
-    if (disasm->asm_code[cmd_ip] & ARG_IMMED)
+    if (disasm->asm_code[cmdIP] & ARG_IMMED)
     {
         WRITE_NUMBER;
     }
 
-    if (disasm->asm_code[cmd_ip] & ARG_RAM)   
+    if (disasm->asm_code[cmdIP] & ARG_RAM)   
     {
         disasm->buf_code[disasm->cursor++] = ']';
     }
