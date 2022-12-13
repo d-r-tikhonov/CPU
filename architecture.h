@@ -1,328 +1,64 @@
-#ifndef COMMANDS_FOR_CPU_H_
-#define COMMANDS_FOR_CPU_H_
+#ifndef ARCHITECTURE_H
+#define ARCHITECTURE_H
 
 //=====================================================================================================================================
 
-#define DO_JUMP        {cpu->ip = cpu->code[(cpu->ip)+1] - 2;}
+#include "parser.h"
+#include "stack.h"
 
-#define DO_POP         ({(double) StackPop (stk) / Accuracy;})
-
-#define DO_PUSH(arg)   StackPush (stk, (arg) * Accuracy);
-
-#define REMEMBER_CALL  {StackPush (cpu->stkCalls, cpu->ip);};
-
-#define RETURN_TO_CALL {cpu->ip = StackPop (cpu->stkCalls) + 1;};
-
-#define SKIP_ARG       {(cpu->ip)++;};
-
-#define COND_JUMP(condition)                                 \
-{                                                            \
-    if (condition)                                           \
-    {                                                        \
-        DO_JUMP;                                             \
-    }                                                        \
-    else                                                     \
-    {                                                        \
-        SKIP_ARG;                                            \
-    }                                                        \
-}
-
-#define WRITE_CMD_NUM   {(asm_code->ptr)[(asm_code->ip)++] = cmd_code;};
-
-#define WRITE_ARG_JUMP  {FuncJump (cursor, asm_code);};
-
-#define WRITE_STACK_ARG {PutArg (cmd_code, cursor, asm_code);};
-
-#define WRITE_JUMP                                                           \
-{                                                                            \
-    WRITE_CMD_NUM;                                                           \
-    WRITE_ARG_JUMP;                                                          \
-}
+#include <ctype.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 //=====================================================================================================================================
 
-DEF_CMD(HLT, 0, 0,
-#ifndef RUN_MODE
-    WRITE_CMD_NUM;
-#else
-    {
-        return 0;
-    };
-#endif
-)
+const size_t STR_MAX_SIZE   = 20;
+const size_t VERSION        = 1;
+const size_t SIGNATURE      = 'NGIS'; 
 
-DEF_CMD(PUSH, 1, 2,
-#ifndef RUN_MODE
-    WRITE_STACK_ARG;
-#else
+//=====================================================================================================================================
+
+struct cmd_t
 {
-    DO_PUSH(((double)*GetArg(cpu)) / Accuracy);
+    size_t sign;
+    size_t vers;
+    size_t size;
+    size_t nInt;
 };
-#endif
-)
 
-DEF_CMD(POP, 2, 2,
-#ifndef RUN_MODE
-    WRITE_STACK_ARG;
-#else
+struct asm_t
 {
-    int* ptr = GetArg(cpu);
+    cmd_t info;
 
-    *ptr = DO_POP * Accuracy;
+    Text commands;
+
+    int* asmArr; 
 };
-#endif
-)
 
-DEF_CMD(ADD , 3, 0,
-#ifndef RUN_MODE
-    WRITE_CMD_NUM;
-#else
+//=====================================================================================================================================
+
+enum Commands
 {
-    double a = DO_POP;
-    double b = DO_POP;
+    CMD_HLT     = 0,
+    CMD_PUSH    = 1,
+    CMD_ADD     = 2,
+    CMD_SUB     = 3,
+    CMD_MUL     = 4,
+    CMD_DIV     = 5,
+    CMD_OUT     = 6,
+};    
 
-    DO_PUSH(a + b);
-};
-#endif
-)
+//=====================================================================================================================================
 
-DEF_CMD(SUB , 4, 0,
-#ifndef RUN_MODE
-    WRITE_CMD_NUM;
-#else
-{
-    double a = DO_POP;
-    double b = DO_POP;
-
-    DO_PUSH(b - a);
-};
-#endif
-)
-
-DEF_CMD(MUL , 5, 0,
-#ifndef RUN_MODE
-    WRITE_CMD_NUM;
-#else
-{
-    DO_PUSH(DO_POP * DO_POP);
-};
-#endif
-)
-
-DEF_CMD(DIV , 6, 0,
-#ifndef RUN_MODE
-    WRITE_CMD_NUM;
-#else
-{
-    double a = DO_POP;
-    double b = DO_POP;
-
-    if (a == 0)
-    {
-        printf ("Error: can't divide by zero!\n");
-        return ZERO_DIVISION;
-    }
-    else
-    {
-        DO_PUSH(b / a);
-    }
-};
-#endif
-)
-
-DEF_CMD(IN  , 7, 0,
-#ifndef RUN_MODE
-    WRITE_CMD_NUM;
-#else
-{
-    printf ("Enter a number: ");
-
-    int value = 0;
-
-    while (!scanf("%d", &value))
-    {
-        printf ("It's not a number! Please, enter a number:\n");
-        SkipNewLines ();
-    }
-
-    SkipNewLines ();
-
-    DO_PUSH(value);
-};
-#endif
-)
-
-DEF_CMD(OUT , 8, 0,
-#ifndef RUN_MODE
-    WRITE_CMD_NUM;
-#else
-{
-    double val = DO_POP;
-
-    if (floor (val) == val)  
-        printf ("Return value is %d \n", (int) val);
-    else                    
-        printf ("Return value is %lg\n",       val);
-};
-#endif
-)
-
-DEF_CMD(JUMP, 9, 1,
-#ifndef RUN_MODE
-    WRITE_JUMP;
-#else
-{
-    DO_JUMP;
-};
-#endif
-)
-
-DEF_CMD(JB, 10, 1,
-#ifndef RUN_MODE
-    WRITE_JUMP;
-#else
-{
-    COND_JUMP(DO_POP < DO_POP);
-};
-#endif
-)
-
-DEF_CMD(JBE, 11, 1,
-#ifndef RUN_MODE
-    WRITE_JUMP;
-#else
-{
-    COND_JUMP(DO_POP <= DO_POP);
-};
-#endif
-)
-
-DEF_CMD(JA, 12, 1,
-#ifndef RUN_MODE
-    WRITE_JUMP;
-#else
-{
-    COND_JUMP(DO_POP > DO_POP);
-};
-#endif
-)
-
-DEF_CMD(JAE, 13, 1,
-#ifndef RUN_MODE
-    WRITE_JUMP;
-#else
-{
-    COND_JUMP(DO_POP >= DO_POP);
-};
-#endif
-)
-
-DEF_CMD(JE, 14, 1,
-#ifndef RUN_MODE
-    WRITE_JUMP;
-#else
-{
-    COND_JUMP(DO_POP == DO_POP);
-};
-#endif
-)
-
-DEF_CMD(JNE, 15, 1,
-#ifndef RUN_MODE
-    WRITE_JUMP;
-#else
-{
-    COND_JUMP(DO_POP != DO_POP);
-};
-#endif
-)
-
-DEF_CMD(NAME, 16, 0,
-#ifndef RUN_MODE
-{
-    FuncName (cursor, asm_code);
-}
-#endif
-)
-
-
-DEF_CMD(LBL , 17, 0,
-#ifndef RUN_MODE
-{
-    FuncLab (cursor, asm_code);
-}
-#endif
-)
-
-DEF_CMD(DRAW, 18, 0,
-#ifndef RUN_MODE
-    WRITE_CMD_NUM;
-#else
-{
-    PrintRAM (BIN_FORMAT, cpu, 100);
-};
-#endif
-)
-
-DEF_CMD(CALL, 19, 1,
-#ifndef RUN_MODE
-    WRITE_JUMP;
-#else
-{
-    REMEMBER_CALL;
-
-    DO_JUMP;
-};
-#endif
-)
-
-DEF_CMD(RET, 20, 0,
-#ifndef RUN_MODE
-    WRITE_CMD_NUM;
-#else
-{
-    RETURN_TO_CALL;
-};
-#endif
-)
-
-DEF_CMD(COPY, 21, 0,
-#ifndef RUN_MODE
-    WRITE_CMD_NUM;
-#else
-{
-    double val = DO_POP;
-
-    DO_PUSH(val);
-    DO_PUSH(val);
-};
-#endif
-)
-
-DEF_CMD(SQRT, 22, 0,
-#ifndef RUN_MODE
-    WRITE_CMD_NUM;
-#else
-{
-    double val = DO_POP;
-    double sqrt_val = sqrt (val);
-
-    DO_PUSH(sqrt_val);
-};
-#endif
-)
-
-DEF_CMD(CLEAR, 23, 0,
-#ifndef RUN_MODE
-    WRITE_CMD_NUM;
-#else
-{
-#ifdef TX_NECESSARY
-    txClearConsole ();
-#endif
-};
-#endif
-)
+int     AsmCtor         (asm_t* asmCode, FILE* source);
+int     AsmDtor         (asm_t* asmCode);
+int     AsmCreateArray  (asm_t* asmCode, FILE* processed);
+int     WritingBinFile  (asm_t* asmCode, FILE* binaryFile);
+int*    ReadingBinFile  (int* cmdArr, size_t* nMemb, FILE* binaryFile);
+int     Execute         (int* cmdArr, size_t* nMemb);
+int     Assemble        (int argc, const char* argv[]);
+int     Run             (int argc, const char* argv[]);
 
 //=====================================================================================================================================
 

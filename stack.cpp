@@ -29,7 +29,7 @@ static void nullValueSet (elem_t* data, size_t size);
 
 void StackCtor (stack_t* const stk)
 {
-    ASSERT (stk != nullptr);
+    ASSERT (stk != nullptr, (void) -1);
 
     stk->capacity = StackInitValue;
     stk->size     = 0;
@@ -46,7 +46,7 @@ void StackCtor (stack_t* const stk)
 
 void StackPush (stack_t* stk, const elem_t item)
 {
-    ASSERT (stk != nullptr);
+    ASSERT (stk != nullptr, (void) -1);
 
     stackIncrease (stk);
 
@@ -58,7 +58,7 @@ void StackPush (stack_t* stk, const elem_t item)
 
 elem_t StackPop (stack_t* const stk)
 {
-    ASSERT (stk != nullptr);
+    ASSERT (stk != nullptr, (elem_t) -1);
 
     elem_t item = Poison;
 
@@ -77,7 +77,7 @@ elem_t StackPop (stack_t* const stk)
 
 void StackDtor (stack_t* const stk)
 {   
-    ASSERT (stk != nullptr);
+    ASSERT (stk != nullptr, (void) -1);
 
     #ifdef CANARY_PROTECT
         free ((char*) stk->data - sizeof(canary_t));
@@ -99,7 +99,7 @@ void StackDtor (stack_t* const stk)
 
 void StackDump (stack_t* const stk)
 {
-    ASSERT (stk != nullptr);
+    ASSERT (stk != nullptr, (void) -1);
 
     if (stk->data == nullptr) 
     {
@@ -160,7 +160,7 @@ void StackDump (stack_t* const stk)
 #ifdef CANARY_PROTECT
     static canary_t* leftCanary (void* const data)
     {
-        ASSERT (data != nullptr);
+        ASSERT (data != nullptr, nullptr);
 
         return (canary_t*) ((char*) data - sizeof (canary_t));
     }
@@ -171,7 +171,7 @@ void StackDump (stack_t* const stk)
 #ifdef CANARY_PROTECT
     static canary_t* rightCanary (void* const data, const size_t capacity)
     {   
-        ASSERT (data != nullptr);
+        ASSERT (data != nullptr, nullptr);
 
         return (canary_t*) ((char*) data + (sizeof (elem_t) * (capacity))); 
     }
@@ -181,7 +181,7 @@ void StackDump (stack_t* const stk)
 
 static elem_t* recallocStack (stack_t* const stk, const size_t capacity)
 {
-    ASSERT (stk != nullptr);
+    ASSERT (stk != nullptr, nullptr);
 
     elem_t* data = stk->data;
     
@@ -218,7 +218,7 @@ static elem_t* recallocStack (stack_t* const stk, const size_t capacity)
 
 static bool isStackFull (const stack_t* const stk)
 {
-    ASSERT (stk != nullptr);
+    assert (stk != nullptr);
 
     return stk->capacity == stk->size;
 }
@@ -227,7 +227,7 @@ static bool isStackFull (const stack_t* const stk)
 
 static bool isStackVast (const stack_t* const stk)
 {
-    ASSERT (stk != nullptr);
+    assert (stk != nullptr);
 
     return stk->capacity / StackMultiplier >= stk->size &&
         stk->capacity > StackInitValue; 
@@ -244,7 +244,7 @@ static void stackIncrease (stack_t* const stk)
         
         elem_t* data = recallocStack (stk, newCapacity);
 
-        ASSERT (data != nullptr);
+        ASSERT (data != nullptr, (void) -1);
 
         stk->data     = (elem_t*) data;
         stk->capacity = newCapacity;
@@ -262,7 +262,7 @@ static void stackDecrease (stack_t* const stk)
         
         elem_t* data = recallocStack (stk, newCapacity);
 
-        ASSERT (data != nullptr);
+        ASSERT (data != nullptr, (void) -1);
 
         stk->data     = (elem_t*) data;
         stk->capacity = newCapacity;

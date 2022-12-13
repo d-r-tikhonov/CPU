@@ -2,20 +2,17 @@
 
 #include <TXLib.h>
 
-#include "assembler.h"
-#include "cpu.h"
-#include "disassembler.h"
+#include "architecture.h"
 
 //=====================================================================================================================================
 
-int main (int argc, char* argv[])
+int main (int argc, const char* argv[])
 {
     Assemble (argc, argv);
 
-    Run ();
-
+    Run (argc, argv);
+    
     return 0;
 }
 
 //=====================================================================================================================================
-
