@@ -11,20 +11,12 @@ int Run (int argc, const char* argv[])
     FILE* data = fopen (argv[2], "r");
     ASSERT (data != nullptr, 1);
 
-    // size_t nMemb    = 0;
-    // int*   cmdArr   = nullptr;
-
-    // cmdArr = ReadingBinFile (cmdArr, &nMemb, data);
-
     cpu_t cpu = {};
     CpuCtor (&cpu, data);
 
     Execute (&cpu);
 
-    printf ("EXECUTE!");
-
     CpuDtor (&cpu);
-    // free (cmdArr);
     fclose (data);
 
     return 0;
@@ -77,37 +69,11 @@ int CpuDtor (cpu_t* cpu)
 
 //=====================================================================================================================================
 
-// int* ReadingBinFile (int* cmdArr, size_t* nMemb, FILE* binaryFile)
-// {
-//     infoCMD_t binInfo = {};
-//     fread (&binInfo, sizeof (infoCMD_t), 1, binaryFile);
-
-//     if (binInfo.sign != SIGNATURE)
-//     {
-//         printf ("Error! The signature is uncorrected!\n");
-//         abort ();
-//     }
-
-//     if (binInfo.vers != VERSION)
-//     {
-//         printf ("Error! The version is uncorrected!\n");
-//         abort ();
-//     }
-
-//     cmdArr = (int*) calloc (binInfo.nInt + 1, sizeof (int));
-//     fread (cmdArr, sizeof (int), binInfo.nInt, binaryFile);
-//     *nMemb = binInfo.nInt;
-    
-//     return cmdArr;
-// }
-
-//=====================================================================================================================================
-
 int Execute (cpu_t* cpu)
 {
     ASSERT (cpu != nullptr, -1);
 
-    int ip  = 0;
+    size_t ip  = 0;
 
     int firstNum  = 0;
     int secondNum = 0;
@@ -136,25 +102,12 @@ int Execute (cpu_t* cpu)
                 break;
             }
 
-            case CMD_POP:
-            {   
-                ip++;
-                int* arg = GetPopArg (currentCmd, &ip, cpu);
-                *arg = StackPop (&cpu->stk);
-                break;
-            }
-
-            case CMD_JMP:
-            {
-                ip++;
-                GetJumpArg (&ip, cpu);
-            }
-
             case CMD_ADD:
             {
                 printf ("add\n");
 
                 CALC(&cpu->stk, +);
+                
                 break;
             }
 
@@ -163,6 +116,7 @@ int Execute (cpu_t* cpu)
                 printf ("sub\n");
 
                 CALC(&cpu->stk, -);
+
                 break;
             }
 
@@ -171,6 +125,7 @@ int Execute (cpu_t* cpu)
                 printf ("mul\n");
 
                 CALC(&cpu->stk, *);
+
                 break;
             }
 
@@ -179,6 +134,7 @@ int Execute (cpu_t* cpu)
                 printf ("div\n");
 
                 CALC(&cpu->stk, /);
+
                 break;
             }
 
@@ -187,12 +143,30 @@ int Execute (cpu_t* cpu)
                 printf ("OUT: ");
 
                 printf ("%d\n", StackPop (&cpu->stk));
+
                 break;
             }
 
             case CMD_HLT:
             {
                 printf ("hlt\n");
+
+                break;
+            }
+
+            case CMD_POP:
+            {   
+                ip++;
+                int* arg = GetPopArg (currentCmd, &ip, cpu);
+                *arg = StackPop (&cpu->stk);
+
+                break;
+            }
+
+            case CMD_JMP:
+            {
+                ip++;
+                GetJumpArg (&ip, cpu);
 
                 break;
             }
@@ -211,7 +185,7 @@ int Execute (cpu_t* cpu)
 
 //=====================================================================================================================================
 
-int GetPushArg (int command, int* ip, cpu_t* cpu)
+int GetPushArg (int command, size_t* ip, cpu_t* cpu)
 {
     ASSERT (ip   != nullptr, -1);
     ASSERT (cpu  != nullptr, -1);
@@ -273,7 +247,7 @@ int GetPushArg (int command, int* ip, cpu_t* cpu)
 
 //=====================================================================================================================================
 
-int* GetPopArg (int command, int* ip, cpu_t* cpu)
+int* GetPopArg (int command, size_t* ip, cpu_t* cpu)
 {
     ASSERT (ip   != nullptr, nullptr);
     ASSERT (cpu  != nullptr, nullptr);
@@ -295,7 +269,7 @@ int* GetPopArg (int command, int* ip, cpu_t* cpu)
         if (command & ARG_REG)
         {
             memcpy (&currentReg, cpu->cmdArr + *ip, sizeof (int));
-            *ip += sizeof(int);
+            *ip += sizeof (int);
 
             arg += cpu->regs[currentReg];
         }
@@ -307,7 +281,6 @@ int* GetPopArg (int command, int* ip, cpu_t* cpu)
         }
         else
         {
-            sleep (1); //TODO
             *ip -= 1;
 
             return &cpu->RAM[arg];
@@ -332,7 +305,7 @@ int* GetPopArg (int command, int* ip, cpu_t* cpu)
 
 //=====================================================================================================================================
 
-void GetJumpArg (int* ip, cpu_t* cpu)
+void GetJumpArg (size_t* ip, cpu_t* cpu)
 {
     ASSERT (ip  != nullptr, (void) -1);
     ASSERT (cpu != nullptr, (void) -1);

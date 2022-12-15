@@ -21,7 +21,6 @@ const size_t MAX_LABEL_SIZE     = 20;
 const size_t MAX_LABEL_COUNT    = 20;
 const size_t MAX_REGS_COUNT     = 5;
 const size_t LABEL_POISON       = 0xCAFEBABE;
-// const char*  LABEL_NAME_POSION  = "FREE";
 
 //=====================================================================================================================================
 
@@ -103,14 +102,14 @@ int     Assemble            (int argc, const char* argv[]);
 int     Run                 (int argc, const char* argv[]);
 int     isRegister          (char* str);
 int     isBrackets          (char* str);
-int     ParseJumpArg        (char* line, asm_t* asmCode, int* ip);
-void    ParseLabel          (char* cmd, asm_t* asmCode, int ip);
-void    ParseArg            (char* line, int command, asm_t* asmCode, int* ip);
-int     ParseCommonArg      (char* line, int command, asm_t* asmCode, int* ip);
-int     ParseBracketsArg    (char* line, int command, asm_t* asmCode, int* ip);
-int     GetPushArg          (int command, int* ip, cpu_t* cpu);
-int*    GetPopArg           (int command, int* ip, cpu_t* cpu);
-void    GetJumpArg          (int* ip, cpu_t* cpu);
+int     ParseJumpArg        (char* line, asm_t* asmCode, size_t* ip);
+void    ParseLabel          (char* cmd, asm_t* asmCode, size_t ip);
+void    ParseArg            (char* line, int command, asm_t* asmCode, size_t* ip);
+int     ParseCommonArg      (char* line, int command, asm_t* asmCode, size_t* ip);
+int     ParseBracketsArg    (char* line, int command, asm_t* asmCode, size_t* ip);
+int     GetPushArg          (int command, size_t* ip, cpu_t* cpu);
+int*    GetPopArg           (int command, size_t* ip, cpu_t* cpu);
+void    GetJumpArg          (size_t* ip, cpu_t* cpu);
 
 //=====================================================================================================================================
 

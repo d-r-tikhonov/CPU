@@ -4,6 +4,10 @@
 
 //=====================================================================================================================================
 
+const char*  LABEL_NAME_POSION  = "FREE";
+
+//=====================================================================================================================================
+
 int Assemble (int argc, const char* argv[])
 {
     ASSERT (argc != 2, 1);
@@ -53,7 +57,7 @@ int AsmCtor (asm_t* asmCode, FILE* source)
     for (size_t index = 0; index < MAX_LABEL_COUNT; index++)
     {
         asmCode->labels[index].adress = LABEL_POISON;
-        // asmCode->labels[index].name   = (char*) LABEL_NAME_POSION; //TODO
+        asmCode->labels[index].name   = (char*) LABEL_NAME_POSION;
     }
 
     return 0;
@@ -77,7 +81,7 @@ int AsmCreateArray (asm_t* asmCode)
 {
     ASSERT (asmCode != nullptr, -1);
 
-    int ip = 0;
+    size_t ip = 0;
 
     for (size_t index = 0; index < asmCode->info.size; index++)
     {
@@ -88,16 +92,7 @@ int AsmCreateArray (asm_t* asmCode)
 
         if (strcasecmp (cmd, "push") == 0)
         {
-            // asmCode->asmArr[ip++] = CMD_PUSH;
             ParseArg (asmCode->commands.lines[index].lineStart + nChar, CMD_PUSH, asmCode, &ip);
-
-            // if (sscanf (asmCode->commands.lines[index].lineStart + nChar, "%d", &(asmCode->asmArr[ip++])) == 0)
-            // {
-            //     printf ("Error! Incorrectly entered operation: %s", cmd);
-            //     return 1;
-            // }
-
-            // (asmCode->info.nInt)++;
         }
         else if ((strcasecmp (cmd, "pop") == 0))
         {
@@ -201,7 +196,7 @@ int isBrackets (char* str)
 
 //=====================================================================================================================================
 
-void ParseArg (char* line, int command, asm_t* asmCode, int* ip)
+void ParseArg (char* line, int command, asm_t* asmCode, size_t* ip)
 {
     ASSERT (line    != nullptr, (void) -1);
     ASSERT (asmCode != nullptr, (void) -1);
@@ -234,13 +229,13 @@ void ParseArg (char* line, int command, asm_t* asmCode, int* ip)
     if (isArg == 0)
     {
         printf ("Error in %s! Invalid argument: %s...\n", __func__, line);
-        // abort ();
+        abort ();
     }
 }
 
 //=====================================================================================================================================
 
-int ParseJumpArg (char* line, asm_t* asmCode, int* ip)
+int ParseJumpArg (char* line, asm_t* asmCode, size_t* ip)
 {
     ASSERT (line    != nullptr, -1);
     ASSERT (asmCode != nullptr, -1);
@@ -260,6 +255,7 @@ int ParseJumpArg (char* line, asm_t* asmCode, int* ip)
         else
         {
             //TODO
+            
             return 1;
         }
     }
@@ -308,21 +304,21 @@ int ParseJumpArg (char* line, asm_t* asmCode, int* ip)
 
 //=====================================================================================================================================
 
-void ParseLabel (char* cmd, asm_t* asmCode, int ip)
+void ParseLabel (char* cmd, asm_t* asmCode, size_t ip)
 {
     ASSERT (cmd     != nullptr, (void) -1);
     ASSERT (asmCode != nullptr, (void) -1);
 
-    int  currentAdressLbl                   = -1;
+    int  currentAdress                      = -1;
     char currentTextLabel[MAX_LABEL_SIZE]   = {};
     int  labelLen                           = 0;
 
-    if (sscanf (cmd, "%d:", &currentAdressLbl) == 1)
+    if (sscanf (cmd, "%d:", &currentAdress) == 1)
     {
-        if (currentAdressLbl >= 0 && currentAdressLbl < MAX_LABEL_COUNT && asmCode->labels[currentAdressLbl].adress == LABEL_POISON)
+        if (currentAdress >= 0 && currentAdress < MAX_LABEL_COUNT && asmCode->labels[currentAdress].adress == LABEL_POISON)
         {
-            asmCode->labels[currentAdressLbl].name   = cmd;
-            asmCode->labels[currentAdressLbl].adress = ip;
+            asmCode->labels[currentAdress].name   = cmd;
+            asmCode->labels[currentAdress].adress = ip;
         }
         else
         {
@@ -337,13 +333,13 @@ void ParseLabel (char* cmd, asm_t* asmCode, int ip)
 
         for (size_t num = 0; num < MAX_LABEL_COUNT; num++)
         {
-            if (strcmp (asmCode->labels[num].name, "FREE") == 0)
+            if (strcmp (asmCode->labels[num].name, LABEL_NAME_POSION) == 0)
             {
                 asmCode->labels[num].name = currentTextLabel;
 
                 asmCode->labels[num].adress = ip;
 
-                currentAdressLbl = num;
+                currentAdress = num;
 
                 label = 1;
 
@@ -359,8 +355,8 @@ void ParseLabel (char* cmd, asm_t* asmCode, int ip)
 
         if (label == 0)
         {
-        printf ("Error!"); //TODO
-        abort ();
+            printf ("Error!"); //TODO
+            abort ();
         }
     }
     else
@@ -372,7 +368,7 @@ void ParseLabel (char* cmd, asm_t* asmCode, int ip)
 
 //=====================================================================================================================================
 
-int ParseCommonArg (char* line, int command, asm_t* asmCode, int* ip)
+int ParseCommonArg (char* line, int command, asm_t* asmCode, size_t* ip)
 {
     ASSERT (line    != nullptr, -1);
     ASSERT (asmCode != nullptr, -1);
@@ -426,7 +422,7 @@ int ParseCommonArg (char* line, int command, asm_t* asmCode, int* ip)
 
 //=====================================================================================================================================
 
-int ParseBracketsArg (char* line, int command, asm_t* asmCode, int* ip)
+int ParseBracketsArg (char* line, int command, asm_t* asmCode, size_t* ip)
 {
     ASSERT (line    != nullptr, -1);
     ASSERT (asmCode != nullptr, -1);
