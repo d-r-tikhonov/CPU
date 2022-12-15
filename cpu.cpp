@@ -107,7 +107,7 @@ int Execute (cpu_t* cpu)
                 printf ("add\n");
 
                 CALC(&cpu->stk, +);
-                
+
                 break;
             }
 
@@ -190,10 +190,10 @@ int GetPushArg (int command, size_t* ip, cpu_t* cpu)
     ASSERT (ip   != nullptr, -1);
     ASSERT (cpu  != nullptr, -1);
 
-    int    arg          = 0;
+    size_t arg          = 0;
     int    value        = 0;
     int    currentReg   = 0; 
-    short  ipCtrl       = 0;
+    int    ipCtrl       = 0;
 
     if (command & ARG_IMMED)
     {   
@@ -252,9 +252,9 @@ int* GetPopArg (int command, size_t* ip, cpu_t* cpu)
     ASSERT (ip   != nullptr, nullptr);
     ASSERT (cpu  != nullptr, nullptr);
 
-    int arg         = 0; 
-    int value       = 0;
-    int currentReg  = 0; 
+    size_t arg         = 0; 
+    int    value       = 0;
+    int    currentReg  = 0; 
 
     if (command & ARG_MEM)
     {
