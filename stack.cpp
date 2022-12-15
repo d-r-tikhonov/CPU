@@ -218,7 +218,7 @@ static elem_t* recallocStack (stack_t* const stk, const size_t capacity)
 
 static bool isStackFull (const stack_t* const stk)
 {
-    assert (stk != nullptr);
+    ASSERT (stk != nullptr, (bool) -1);
 
     return stk->capacity == stk->size;
 }
@@ -227,7 +227,7 @@ static bool isStackFull (const stack_t* const stk)
 
 static bool isStackVast (const stack_t* const stk)
 {
-    assert (stk != nullptr);
+    ASSERT (stk != nullptr, (bool) -1);
 
     return stk->capacity / StackMultiplier >= stk->size &&
         stk->capacity > StackInitValue; 

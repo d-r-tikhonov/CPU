@@ -1,0 +1,674 @@
+
+--------------------------------------------------
+TXLib предупреждает:
+
+Программа: F:\Projects\CPU\cpu.exe,
+
+ВНЕЗАПНО: Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x00007FF636B08AD5. Попытка прочесть данные по адресу 0x0000000000000001 в модуле F:\Projects\CPU\cpu.exe. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+#1: TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400], Instance: 0x00007FF636C428F0 (64-bit), Flags: Cmdre0, Thread: 0x3684 (Main), _doserrno: 131 (Unknown error). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 1 0x00007FF636B0982F in F:\Projects\CPU\cpu.exe: __mingw_sformat()
+# 2 0x00007FF636B0C538 in F:\Projects\CPU\cpu.exe: __mingw_vsscanf()
+# 3 0x00007FF636B1E407 in F:\Projects\CPU\cpu.exe: sscanf()
+# 4 0x00007FF636AD3652 in F:\Projects\CPU\cpu.exe: ParseBracketsArg()
+# 5 0x00007FF636AD2BEC in F:\Projects\CPU\cpu.exe: ParseArg()
+# 6 0x00007FF636AD25D2 in F:\Projects\CPU\cpu.exe: AsmCreateArray()
+# 7 0x00007FF636AD2209 in F:\Projects\CPU\cpu.exe: Assemble()
+# 8 0x00007FF636AF0598 in F:\Projects\CPU\cpu.exe: main()
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	F:\TX\TXLib.h
+Compiled:	Dec 15 2022 02:29:35, GNU g++ 11.2.0, std=201703L, MinGW-W64 Runtime 9.0.0 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 15 2022 02:29:42
+
+Run file:	F:\Projects\CPU\cpu.exe
+Directory:	F:\Projects\CPU
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: F:\Projects\CPU\cpu.exe,
+
+ВНЕЗАПНО: signal (11, 0x00): SIGSEGV: Доступ по неверному указателю. Ставьте ассерты! 
+
+Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x00007FF636B08AD5. Попытка прочесть данные по адресу 0x0000000000000001 в модуле F:\Projects\CPU\cpu.exe. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+С помощью функции signal() вы можете сами обработать эту ошибку.
+
+#2: TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400], Instance: 0x00007FF636C428F0 (64-bit), Flags: Cmdre0, Thread: 0x3684 (Main), _doserrno: 131 (Unknown error). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 1 0x00007FF636B0982F in F:\Projects\CPU\cpu.exe: __mingw_sformat()
+# 2 0x00007FF636B0C538 in F:\Projects\CPU\cpu.exe: __mingw_vsscanf()
+# 3 0x00007FF636B1E407 in F:\Projects\CPU\cpu.exe: sscanf()
+# 4 0x00007FF636AD3652 in F:\Projects\CPU\cpu.exe: ParseBracketsArg()
+# 5 0x00007FF636AD2BEC in F:\Projects\CPU\cpu.exe: ParseArg()
+# 6 0x00007FF636AD25D2 in F:\Projects\CPU\cpu.exe: AsmCreateArray()
+# 7 0x00007FF636AD2209 in F:\Projects\CPU\cpu.exe: Assemble()
+# 8 0x00007FF636AF0598 in F:\Projects\CPU\cpu.exe: main()
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	F:\TX\TXLib.h
+Compiled:	Dec 15 2022 02:29:35, GNU g++ 11.2.0, std=201703L, MinGW-W64 Runtime 9.0.0 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 15 2022 02:29:42
+
+Run file:	F:\Projects\CPU\cpu.exe
+Directory:	F:\Projects\CPU
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib предупреждает:
+
+Программа: F:\Projects\CPU\cpu.exe,
+
+ВНЕЗАПНО: Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x00007FF76F838AE5. Попытка прочесть данные по адресу 0x0000000000000001 в модуле F:\Projects\CPU\cpu.exe. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+#1: TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400], Instance: 0x00007FF76F9728F0 (64-bit), Flags: Cmdre0, Thread: 0x25B8 (Main), _doserrno: 131 (Unknown error). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 1 0x00007FF76F83983F in F:\Projects\CPU\cpu.exe: __mingw_sformat()
+# 2 0x00007FF76F83C548 in F:\Projects\CPU\cpu.exe: __mingw_vsscanf()
+# 3 0x00007FF76F84E417 in F:\Projects\CPU\cpu.exe: sscanf()
+# 4 0x00007FF76F803661 in F:\Projects\CPU\cpu.exe: ParseBracketsArg()
+# 5 0x00007FF76F802BFB in F:\Projects\CPU\cpu.exe: ParseArg()
+# 6 0x00007FF76F8025E1 in F:\Projects\CPU\cpu.exe: AsmCreateArray()
+# 7 0x00007FF76F802209 in F:\Projects\CPU\cpu.exe: Assemble()
+# 8 0x00007FF76F8205A8 in F:\Projects\CPU\cpu.exe: main()
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	F:\TX\TXLib.h
+Compiled:	Dec 15 2022 02:30:13, GNU g++ 11.2.0, std=201703L, MinGW-W64 Runtime 9.0.0 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 15 2022 02:30:19
+
+Run file:	F:\Projects\CPU\cpu.exe
+Directory:	F:\Projects\CPU
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: F:\Projects\CPU\cpu.exe,
+
+ВНЕЗАПНО: signal (11, 0x00): SIGSEGV: Доступ по неверному указателю. Ставьте ассерты! 
+
+Нарушение доступа к памяти.
+
+#1: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x00007FF76F838AE5. Попытка прочесть данные по адресу 0x0000000000000001 в модуле F:\Projects\CPU\cpu.exe. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+С помощью функции signal() вы можете сами обработать эту ошибку.
+
+#2: TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400], Instance: 0x00007FF76F9728F0 (64-bit), Flags: Cmdre0, Thread: 0x25B8 (Main), _doserrno: 131 (Unknown error). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 1 0x00007FF76F83983F in F:\Projects\CPU\cpu.exe: __mingw_sformat()
+# 2 0x00007FF76F83C548 in F:\Projects\CPU\cpu.exe: __mingw_vsscanf()
+# 3 0x00007FF76F84E417 in F:\Projects\CPU\cpu.exe: sscanf()
+# 4 0x00007FF76F803661 in F:\Projects\CPU\cpu.exe: ParseBracketsArg()
+# 5 0x00007FF76F802BFB in F:\Projects\CPU\cpu.exe: ParseArg()
+# 6 0x00007FF76F8025E1 in F:\Projects\CPU\cpu.exe: AsmCreateArray()
+# 7 0x00007FF76F802209 in F:\Projects\CPU\cpu.exe: Assemble()
+# 8 0x00007FF76F8205A8 in F:\Projects\CPU\cpu.exe: main()
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	F:\TX\TXLib.h
+Compiled:	Dec 15 2022 02:30:13, GNU g++ 11.2.0, std=201703L, MinGW-W64 Runtime 9.0.0 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 15 2022 02:30:19
+
+Run file:	F:\Projects\CPU\cpu.exe
+Directory:	F:\Projects\CPU
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: F:\Projects\CPU\cpu.exe,
+
+ВНЕЗАПНО: signal (22, 0x00): SIGABRT: Аварийное завершение программы, вызвана функция abort(). 
+
+С помощью функции signal() вы можете сами обработать эту ошибку.
+
+#1: TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400], Instance: 0x00007FF7FA7C28F0 (64-bit), Flags: Cmdre0, Thread: 0x694 (Main), _doserrno: 131 (Unknown error). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x00007FF7FA65D9EF in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txError()
+# 1 0x00007FF7FA65DD00 in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txOnSignal()
+# 2 0x00007FFF71BBADFB in C:\Windows\System32\msvcrt.dll: raise()
+# 3 0x00007FFF71BBF1FB in C:\Windows\System32\msvcrt.dll: abort()
+# 4 0x00007FF7FA652C2E in F:\Projects\CPU\cpu.exe: ParseArg()
+# 5 0x00007FF7FA6525E1 in F:\Projects\CPU\cpu.exe: AsmCreateArray()
+# 6 0x00007FF7FA652209 in F:\Projects\CPU\cpu.exe: Assemble()
+# 7 0x00007FF7FA6705A8 in F:\Projects\CPU\cpu.exe: main()
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	F:\TX\TXLib.h
+Compiled:	Dec 15 2022 02:32:25, GNU g++ 11.2.0, std=201703L, MinGW-W64 Runtime 9.0.0 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 15 2022 02:32:32
+
+Run file:	F:\Projects\CPU\cpu.exe
+Directory:	F:\Projects\CPU
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: F:\Projects\CPU\cpu.exe,
+
+ВНЕЗАПНО: signal (22, 0x00): SIGABRT: Аварийное завершение программы, вызвана функция abort(). 
+
+С помощью функции signal() вы можете сами обработать эту ошибку.
+
+#1: TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400], Instance: 0x00007FF7919528F0 (64-bit), Flags: Cmdre0, Thread: 0x3CC (Main), _doserrno: 131 (Unknown error). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x00007FF7917ED99F in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txError()
+# 1 0x00007FF7917EDCB0 in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txOnSignal()
+# 2 0x00007FFF71BBADFB in C:\Windows\System32\msvcrt.dll: raise()
+# 3 0x00007FFF71BBF1FB in C:\Windows\System32\msvcrt.dll: abort()
+# 4 0x00007FF7917E2BE4 in F:\Projects\CPU\cpu.exe: ParseArg()
+# 5 0x00007FF7917E25A5 in F:\Projects\CPU\cpu.exe: AsmCreateArray()
+# 6 0x00007FF7917E21FA in F:\Projects\CPU\cpu.exe: Assemble()
+# 7 0x00007FF791800558 in F:\Projects\CPU\cpu.exe: main()
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	F:\TX\TXLib.h
+Compiled:	Dec 15 2022 02:34:12, GNU g++ 11.2.0, std=201703L, MinGW-W64 Runtime 9.0.0 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 15 2022 02:34:17
+
+Run file:	F:\Projects\CPU\cpu.exe
+Directory:	F:\Projects\CPU
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib предупреждает:
+
+Программа: F:\Projects\CPU\cpu.exe,
+
+ВНЕЗАПНО: #1: Куча была повреждена. (0xC0000374) при выполнении кода по адресу 0x00007FFF71E8ED29 в функции RtlIsZeroMemory() в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+Ой, всё (EXCEPTION_NONCONTINUABLE).
+
+#1: TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400], Instance: 0x00007FF7D10928F0 (64-bit), Flags: Cmdre0, Thread: 0x3644 (Main), _doserrno: 131 (Unknown error). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x00007FFF71E8ED29 in C:\Windows\SYSTEM32\ntdll.dll: RtlIsZeroMemory()
+# 1 0x00007FFF71E8ECF3 in C:\Windows\SYSTEM32\ntdll.dll: RtlIsZeroMemory()
+# 2 0x00007FFF71E97A72 in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 3 0x00007FFF71E97D5A in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 4 0x00007FFF71E9D991 in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 5 0x00007FFF71E360DC in C:\Windows\SYSTEM32\ntdll.dll: memset()
+# 6 0x00007FFF71DA5D21 in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 7 0x00007FFF71BA9C9C in C:\Windows\System32\msvcrt.dll: free()
+# 8 0x00007FFF71BC155A in C:\Windows\System32\msvcrt.dll: strerror_s()
+# 9 0x00007FFF71BB8993 in C:\Windows\System32\msvcrt.dll: __unguarded_readlc_active_add_func()
+#10 0x00007FFF71BB9B58 in C:\Windows\System32\msvcrt.dll: get_current_locale()
+#11 0x00007FFF71BB9CCF in C:\Windows\System32\msvcrt.dll: setlocale()
+#12 0x00007FFF71BBEA30 in C:\Windows\System32\msvcrt.dll: wsetlocale()
+#13 0x00007FF7D0F2B93A in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::txSetLocale()
+#14 0x00007FF7D0F26B3E in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txPauseBeforeTermination()
+#15 0x00007FF7D0F263EE in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txCleanup()
+#16 0x00007FF7D0F25E07 in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txOnExit()
+#17 0x00007FF7D0F214B5 in F:\Projects\CPU\cpu.exe: __tmainCRTStartup()
+#18 0x00007FF7D0F214F6 in F:\Projects\CPU\cpu.exe: mainCRTStartup()
+#19 0x00007FFF719D7034 in C:\Windows\System32\KERNEL32.dll: BaseThreadInitThunk()
+#20 0x00007FFF71DDCEC1 in C:\Windows\SYSTEM32\ntdll.dll: RtlUserThreadStart()
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	F:\TX\TXLib.h
+Compiled:	Dec 15 2022 03:27:20, GNU g++ 11.2.0, std=201703L, MinGW-W64 Runtime 9.0.0 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 15 2022 03:27:26
+
+Run file:	F:\Projects\CPU\cpu.exe
+Directory:	F:\Projects\CPU
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: F:\Projects\CPU\cpu.exe,
+
+ВНЕЗАПНО: #1: Куча была повреждена. (0xC0000374) при выполнении кода по адресу 0x00007FFF71E8ED29 в функции RtlIsZeroMemory() в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+Ой, всё (EXCEPTION_NONCONTINUABLE).
+
+С помощью функции _set_se_translator() вы можете сами обработать эту ошибку.
+
+#2: TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400], Instance: 0x00007FF7D10928F0 (64-bit), Flags: Cmdre0, Thread: 0x3644 (Main), _doserrno: 131 (Unknown error). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x00007FFF71E8ED29 in C:\Windows\SYSTEM32\ntdll.dll: RtlIsZeroMemory()
+# 1 0x00007FFF71E8ECF3 in C:\Windows\SYSTEM32\ntdll.dll: RtlIsZeroMemory()
+# 2 0x00007FFF71E97A72 in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 3 0x00007FFF71E97D5A in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 4 0x00007FFF71E9D991 in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 5 0x00007FFF71E360DC in C:\Windows\SYSTEM32\ntdll.dll: memset()
+# 6 0x00007FFF71DA5D21 in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 7 0x00007FFF71BA9C9C in C:\Windows\System32\msvcrt.dll: free()
+# 8 0x00007FFF71BC155A in C:\Windows\System32\msvcrt.dll: strerror_s()
+# 9 0x00007FFF71BB8993 in C:\Windows\System32\msvcrt.dll: __unguarded_readlc_active_add_func()
+#10 0x00007FFF71BB9B58 in C:\Windows\System32\msvcrt.dll: get_current_locale()
+#11 0x00007FFF71BB9CCF in C:\Windows\System32\msvcrt.dll: setlocale()
+#12 0x00007FFF71BBEA30 in C:\Windows\System32\msvcrt.dll: wsetlocale()
+#13 0x00007FF7D0F2B93A in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::txSetLocale()
+#14 0x00007FF7D0F26B3E in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txPauseBeforeTermination()
+#15 0x00007FF7D0F263EE in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txCleanup()
+#16 0x00007FF7D0F25E07 in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txOnExit()
+#17 0x00007FF7D0F214B5 in F:\Projects\CPU\cpu.exe: __tmainCRTStartup()
+#18 0x00007FF7D0F214F6 in F:\Projects\CPU\cpu.exe: mainCRTStartup()
+#19 0x00007FFF719D7034 in C:\Windows\System32\KERNEL32.dll: BaseThreadInitThunk()
+#20 0x00007FFF71DDCEC1 in C:\Windows\SYSTEM32\ntdll.dll: RtlUserThreadStart()
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	F:\TX\TXLib.h
+Compiled:	Dec 15 2022 03:27:20, GNU g++ 11.2.0, std=201703L, MinGW-W64 Runtime 9.0.0 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 15 2022 03:27:26
+
+Run file:	F:\Projects\CPU\cpu.exe
+Directory:	F:\Projects\CPU
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib предупреждает:
+
+Программа: F:\Projects\CPU\cpu.exe,
+
+ВНЕЗАПНО: #1: Куча была повреждена. (0xC0000374) при выполнении кода по адресу 0x00007FFF71E8ED29 в функции RtlIsZeroMemory() в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+Ой, всё (EXCEPTION_NONCONTINUABLE).
+
+#1: TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400], Instance: 0x00007FF7D10928F0 (64-bit), Flags: Cmdre0, Thread: 0xA0C (Main), _doserrno: 131 (Unknown error). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x00007FFF71E8ED29 in C:\Windows\SYSTEM32\ntdll.dll: RtlIsZeroMemory()
+# 1 0x00007FFF71E8ECF3 in C:\Windows\SYSTEM32\ntdll.dll: RtlIsZeroMemory()
+# 2 0x00007FFF71E97A72 in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 3 0x00007FFF71E97D5A in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 4 0x00007FFF71E9D991 in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 5 0x00007FFF71E360DC in C:\Windows\SYSTEM32\ntdll.dll: memset()
+# 6 0x00007FFF71DA5D21 in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 7 0x00007FFF71BA9C9C in C:\Windows\System32\msvcrt.dll: free()
+# 8 0x00007FFF71BC156C in C:\Windows\System32\msvcrt.dll: strerror_s()
+# 9 0x00007FFF71BB8993 in C:\Windows\System32\msvcrt.dll: __unguarded_readlc_active_add_func()
+#10 0x00007FFF71BB9B58 in C:\Windows\System32\msvcrt.dll: get_current_locale()
+#11 0x00007FFF71BB9CCF in C:\Windows\System32\msvcrt.dll: setlocale()
+#12 0x00007FFF71BBEA30 in C:\Windows\System32\msvcrt.dll: wsetlocale()
+#13 0x00007FF7D0F2B93A in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::txSetLocale()
+#14 0x00007FF7D0F26B3E in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txPauseBeforeTermination()
+#15 0x00007FF7D0F263EE in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txCleanup()
+#16 0x00007FF7D0F25E07 in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txOnExit()
+#17 0x00007FF7D0F214B5 in F:\Projects\CPU\cpu.exe: __tmainCRTStartup()
+#18 0x00007FF7D0F214F6 in F:\Projects\CPU\cpu.exe: mainCRTStartup()
+#19 0x00007FFF719D7034 in C:\Windows\System32\KERNEL32.dll: BaseThreadInitThunk()
+#20 0x00007FFF71DDCEC1 in C:\Windows\SYSTEM32\ntdll.dll: RtlUserThreadStart()
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	F:\TX\TXLib.h
+Compiled:	Dec 15 2022 03:27:20, GNU g++ 11.2.0, std=201703L, MinGW-W64 Runtime 9.0.0 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 15 2022 03:27:44
+
+Run file:	F:\Projects\CPU\cpu.exe
+Directory:	F:\Projects\CPU
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: F:\Projects\CPU\cpu.exe,
+
+ВНЕЗАПНО: #1: Куча была повреждена. (0xC0000374) при выполнении кода по адресу 0x00007FFF71E8ED29 в функции RtlIsZeroMemory() в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+Ой, всё (EXCEPTION_NONCONTINUABLE).
+
+С помощью функции _set_se_translator() вы можете сами обработать эту ошибку.
+
+#2: TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400], Instance: 0x00007FF7D10928F0 (64-bit), Flags: Cmdre0, Thread: 0xA0C (Main), _doserrno: 131 (Unknown error). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x00007FFF71E8ED29 in C:\Windows\SYSTEM32\ntdll.dll: RtlIsZeroMemory()
+# 1 0x00007FFF71E8ECF3 in C:\Windows\SYSTEM32\ntdll.dll: RtlIsZeroMemory()
+# 2 0x00007FFF71E97A72 in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 3 0x00007FFF71E97D5A in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 4 0x00007FFF71E9D991 in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 5 0x00007FFF71E360DC in C:\Windows\SYSTEM32\ntdll.dll: memset()
+# 6 0x00007FFF71DA5D21 in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 7 0x00007FFF71BA9C9C in C:\Windows\System32\msvcrt.dll: free()
+# 8 0x00007FFF71BC156C in C:\Windows\System32\msvcrt.dll: strerror_s()
+# 9 0x00007FFF71BB8993 in C:\Windows\System32\msvcrt.dll: __unguarded_readlc_active_add_func()
+#10 0x00007FFF71BB9B58 in C:\Windows\System32\msvcrt.dll: get_current_locale()
+#11 0x00007FFF71BB9CCF in C:\Windows\System32\msvcrt.dll: setlocale()
+#12 0x00007FFF71BBEA30 in C:\Windows\System32\msvcrt.dll: wsetlocale()
+#13 0x00007FF7D0F2B93A in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::txSetLocale()
+#14 0x00007FF7D0F26B3E in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txPauseBeforeTermination()
+#15 0x00007FF7D0F263EE in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txCleanup()
+#16 0x00007FF7D0F25E07 in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txOnExit()
+#17 0x00007FF7D0F214B5 in F:\Projects\CPU\cpu.exe: __tmainCRTStartup()
+#18 0x00007FF7D0F214F6 in F:\Projects\CPU\cpu.exe: mainCRTStartup()
+#19 0x00007FFF719D7034 in C:\Windows\System32\KERNEL32.dll: BaseThreadInitThunk()
+#20 0x00007FFF71DDCEC1 in C:\Windows\SYSTEM32\ntdll.dll: RtlUserThreadStart()
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	F:\TX\TXLib.h
+Compiled:	Dec 15 2022 03:27:20, GNU g++ 11.2.0, std=201703L, MinGW-W64 Runtime 9.0.0 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 15 2022 03:27:45
+
+Run file:	F:\Projects\CPU\cpu.exe
+Directory:	F:\Projects\CPU
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib предупреждает:
+
+Программа: F:\Projects\CPU\cpu.exe,
+
+ВНЕЗАПНО: #1: Куча была повреждена. (0xC0000374) при выполнении кода по адресу 0x00007FFF71E8ED29 в функции RtlIsZeroMemory() в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+Ой, всё (EXCEPTION_NONCONTINUABLE).
+
+#1: TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400], Instance: 0x00007FF7D10928F0 (64-bit), Flags: Cmdre0, Thread: 0x618 (Main), _doserrno: 131 (Unknown error). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x00007FFF71E8ED29 in C:\Windows\SYSTEM32\ntdll.dll: RtlIsZeroMemory()
+# 1 0x00007FFF71E8ECF3 in C:\Windows\SYSTEM32\ntdll.dll: RtlIsZeroMemory()
+# 2 0x00007FFF71E97A72 in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 3 0x00007FFF71E97D5A in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 4 0x00007FFF71E9D991 in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 5 0x00007FFF71E360DC in C:\Windows\SYSTEM32\ntdll.dll: memset()
+# 6 0x00007FFF71DA5D21 in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 7 0x00007FFF71BA9C9C in C:\Windows\System32\msvcrt.dll: free()
+# 8 0x00007FFF71BC156C in C:\Windows\System32\msvcrt.dll: strerror_s()
+# 9 0x00007FFF71BB8993 in C:\Windows\System32\msvcrt.dll: __unguarded_readlc_active_add_func()
+#10 0x00007FFF71BB9B58 in C:\Windows\System32\msvcrt.dll: get_current_locale()
+#11 0x00007FFF71BB9CCF in C:\Windows\System32\msvcrt.dll: setlocale()
+#12 0x00007FF7D0F2B8EB in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::txSetLocale()
+#13 0x00007FF7D0F26B3E in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txPauseBeforeTermination()
+#14 0x00007FF7D0F263EE in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txCleanup()
+#15 0x00007FF7D0F25E07 in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txOnExit()
+#16 0x00007FF7D0F214B5 in F:\Projects\CPU\cpu.exe: __tmainCRTStartup()
+#17 0x00007FF7D0F214F6 in F:\Projects\CPU\cpu.exe: mainCRTStartup()
+#18 0x00007FFF719D7034 in C:\Windows\System32\KERNEL32.dll: BaseThreadInitThunk()
+#19 0x00007FFF71DDCEC1 in C:\Windows\SYSTEM32\ntdll.dll: RtlUserThreadStart()
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	F:\TX\TXLib.h
+Compiled:	Dec 15 2022 03:27:20, GNU g++ 11.2.0, std=201703L, MinGW-W64 Runtime 9.0.0 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 15 2022 03:31:36
+
+Run file:	F:\Projects\CPU\cpu.exe
+Directory:	F:\Projects\CPU
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: F:\Projects\CPU\cpu.exe,
+
+ВНЕЗАПНО: #1: Куча была повреждена. (0xC0000374) при выполнении кода по адресу 0x00007FFF71E8ED29 в функции RtlIsZeroMemory() в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+Ой, всё (EXCEPTION_NONCONTINUABLE).
+
+С помощью функции _set_se_translator() вы можете сами обработать эту ошибку.
+
+#2: TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400], Instance: 0x00007FF7D10928F0 (64-bit), Flags: Cmdre0, Thread: 0x618 (Main), _doserrno: 131 (Unknown error). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x00007FFF71E8ED29 in C:\Windows\SYSTEM32\ntdll.dll: RtlIsZeroMemory()
+# 1 0x00007FFF71E8ECF3 in C:\Windows\SYSTEM32\ntdll.dll: RtlIsZeroMemory()
+# 2 0x00007FFF71E97A72 in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 3 0x00007FFF71E97D5A in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 4 0x00007FFF71E9D991 in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 5 0x00007FFF71E360DC in C:\Windows\SYSTEM32\ntdll.dll: memset()
+# 6 0x00007FFF71DA5D21 in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 7 0x00007FFF71BA9C9C in C:\Windows\System32\msvcrt.dll: free()
+# 8 0x00007FFF71BC156C in C:\Windows\System32\msvcrt.dll: strerror_s()
+# 9 0x00007FFF71BB8993 in C:\Windows\System32\msvcrt.dll: __unguarded_readlc_active_add_func()
+#10 0x00007FFF71BB9B58 in C:\Windows\System32\msvcrt.dll: get_current_locale()
+#11 0x00007FFF71BB9CCF in C:\Windows\System32\msvcrt.dll: setlocale()
+#12 0x00007FF7D0F2B8EB in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::txSetLocale()
+#13 0x00007FF7D0F26B3E in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txPauseBeforeTermination()
+#14 0x00007FF7D0F263EE in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txCleanup()
+#15 0x00007FF7D0F25E07 in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txOnExit()
+#16 0x00007FF7D0F214B5 in F:\Projects\CPU\cpu.exe: __tmainCRTStartup()
+#17 0x00007FF7D0F214F6 in F:\Projects\CPU\cpu.exe: mainCRTStartup()
+#18 0x00007FFF719D7034 in C:\Windows\System32\KERNEL32.dll: BaseThreadInitThunk()
+#19 0x00007FFF71DDCEC1 in C:\Windows\SYSTEM32\ntdll.dll: RtlUserThreadStart()
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	F:\TX\TXLib.h
+Compiled:	Dec 15 2022 03:27:20, GNU g++ 11.2.0, std=201703L, MinGW-W64 Runtime 9.0.0 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 15 2022 03:31:36
+
+Run file:	F:\Projects\CPU\cpu.exe
+Directory:	F:\Projects\CPU
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib предупреждает:
+
+Программа: F:\Projects\CPU\cpu.exe,
+
+ВНЕЗАПНО: #1: Куча была повреждена. (0xC0000374) при выполнении кода по адресу 0x00007FFF71E8ED29 в функции RtlIsZeroMemory() в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+Ой, всё (EXCEPTION_NONCONTINUABLE).
+
+#1: TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400], Instance: 0x00007FF7878028F0 (64-bit), Flags: Cmdre0, Thread: 0x37F0 (Main), _doserrno: 131 (Unknown error). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x00007FFF71E8ED29 in C:\Windows\SYSTEM32\ntdll.dll: RtlIsZeroMemory()
+# 1 0x00007FFF71E8ECF3 in C:\Windows\SYSTEM32\ntdll.dll: RtlIsZeroMemory()
+# 2 0x00007FFF71E97A72 in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 3 0x00007FFF71E97D5A in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 4 0x00007FFF71E9D991 in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 5 0x00007FFF71E360DC in C:\Windows\SYSTEM32\ntdll.dll: memset()
+# 6 0x00007FFF71DA5D21 in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 7 0x00007FFF71BA9C9C in C:\Windows\System32\msvcrt.dll: free()
+# 8 0x00007FFF71BB8987 in C:\Windows\System32\msvcrt.dll: __unguarded_readlc_active_add_func()
+# 9 0x00007FFF71BB9B58 in C:\Windows\System32\msvcrt.dll: get_current_locale()
+#10 0x00007FFF71BB9CCF in C:\Windows\System32\msvcrt.dll: setlocale()
+#11 0x00007FF78769B8FB in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::txSetLocale()
+#12 0x00007FF787696B4E in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txPauseBeforeTermination()
+#13 0x00007FF7876963FE in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txCleanup()
+#14 0x00007FF787695E17 in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txOnExit()
+#15 0x00007FF7876914B5 in F:\Projects\CPU\cpu.exe: __tmainCRTStartup()
+#16 0x00007FF7876914F6 in F:\Projects\CPU\cpu.exe: mainCRTStartup()
+#17 0x00007FFF719D7034 in C:\Windows\System32\KERNEL32.dll: BaseThreadInitThunk()
+#18 0x00007FFF71DDCEC1 in C:\Windows\SYSTEM32\ntdll.dll: RtlUserThreadStart()
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	F:\TX\TXLib.h
+Compiled:	Dec 15 2022 03:34:19, GNU g++ 11.2.0, std=201703L, MinGW-W64 Runtime 9.0.0 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 15 2022 03:34:25
+
+Run file:	F:\Projects\CPU\cpu.exe
+Directory:	F:\Projects\CPU
+
+--------------------------------------------------
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: F:\Projects\CPU\cpu.exe,
+
+ВНЕЗАПНО: #1: Куча была повреждена. (0xC0000374) при выполнении кода по адресу 0x00007FFF71E8ED29 в функции RtlIsZeroMemory() в модуле C:\Windows\SYSTEM32\ntdll.dll. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+Ой, всё (EXCEPTION_NONCONTINUABLE).
+
+С помощью функции _set_se_translator() вы можете сами обработать эту ошибку.
+
+#2: TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400], Instance: 0x00007FF7878028F0 (64-bit), Flags: Cmdre0, Thread: 0x37F0 (Main), _doserrno: 131 (Unknown error). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x00007FFF71E8ED29 in C:\Windows\SYSTEM32\ntdll.dll: RtlIsZeroMemory()
+# 1 0x00007FFF71E8ECF3 in C:\Windows\SYSTEM32\ntdll.dll: RtlIsZeroMemory()
+# 2 0x00007FFF71E97A72 in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 3 0x00007FFF71E97D5A in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 4 0x00007FFF71E9D991 in C:\Windows\SYSTEM32\ntdll.dll: RtlpNtSetValueKey()
+# 5 0x00007FFF71E360DC in C:\Windows\SYSTEM32\ntdll.dll: memset()
+# 6 0x00007FFF71DA5D21 in C:\Windows\SYSTEM32\ntdll.dll: RtlFreeHeap()
+# 7 0x00007FFF71BA9C9C in C:\Windows\System32\msvcrt.dll: free()
+# 8 0x00007FFF71BB8987 in C:\Windows\System32\msvcrt.dll: __unguarded_readlc_active_add_func()
+# 9 0x00007FFF71BB9B58 in C:\Windows\System32\msvcrt.dll: get_current_locale()
+#10 0x00007FFF71BB9CCF in C:\Windows\System32\msvcrt.dll: setlocale()
+#11 0x00007FF78769B8FB in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::txSetLocale()
+#12 0x00007FF787696B4E in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txPauseBeforeTermination()
+#13 0x00007FF7876963FE in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txCleanup()
+#14 0x00007FF787695E17 in F:\Projects\CPU\cpu.exe: (anonymous namespace)::TX::_txOnExit()
+#15 0x00007FF7876914B5 in F:\Projects\CPU\cpu.exe: __tmainCRTStartup()
+#16 0x00007FF7876914F6 in F:\Projects\CPU\cpu.exe: mainCRTStartup()
+#17 0x00007FFF719D7034 in C:\Windows\System32\KERNEL32.dll: BaseThreadInitThunk()
+#18 0x00007FFF71DDCEC1 in C:\Windows\SYSTEM32\ntdll.dll: RtlUserThreadStart()
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 171, Date: 2022-07-23 02:08:28 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	F:\TX\TXLib.h
+Compiled:	Dec 15 2022 03:34:19, GNU g++ 11.2.0, std=201703L, MinGW-W64 Runtime 9.0.0 (alpha - rev. 0) 0000-00-00, 64-bit, Debug
+Started:	Dec 15 2022 03:34:26
+
+Run file:	F:\Projects\CPU\cpu.exe
+Directory:	F:\Projects\CPU
+
+--------------------------------------------------
