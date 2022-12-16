@@ -2,7 +2,7 @@
 
 #include <TXLib.h>
 
-#include "architecture.h"
+#include "cpu.h"
 
 //=====================================================================================================================================
 
@@ -10,7 +10,7 @@ int main (int argc, const char* argv[])
 {
     Assemble (argc, argv);
 
-    Run (argc, argv);
+    // Run (argc, argv);
     
     return 0;
 }

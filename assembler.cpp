@@ -1,6 +1,6 @@
 //=====================================================================================================================================
 
-#include "architecture.h"
+#include "cpu.h"
 
 //=====================================================================================================================================
 
@@ -29,8 +29,6 @@ int Assemble (int argc, const char* argv[])
 
     AsmDtor (&asmCode);
 
-    printf ("DTOR");
-
     fclose (source);
     fclose (processed);
 
@@ -46,12 +44,12 @@ int AsmCtor (asm_t* asmCode, FILE* source)
 
     TextCtor (&(asmCode->commands), source);
 
-    asmCode->asmArr    = (char*) calloc (asmCode->info.size * 2, sizeof (int)); //TODO  
-    ASSERT (asmCode->asmArr != nullptr, 1); 
+    asmCode->asmArr = (char*) calloc (asmCode->info.size * 2, sizeof (int));
+    ASSERT (asmCode->asmArr != nullptr, -1); 
 
     asmCode->info.sign = SIGNATURE;
     asmCode->info.vers = VERSION;
-    asmCode->info.size = asmCode->info.nInt = asmCode->commands.nLines - 1;
+    asmCode->info.size = asmCode->commands.nLines - 1;
     asmCode->info.nArgs = 0;
 
     for (size_t index = 0; index < MAX_LABEL_COUNT; index++)
@@ -82,60 +80,51 @@ int AsmCreateArray (asm_t* asmCode)
     ASSERT (asmCode != nullptr, -1);
 
     size_t ip = 0;
+    size_t index = 0;
 
-    for (size_t index = 0; index < asmCode->info.size; index++)
+    for (index = 0, ip = 0; index < asmCode->info.size; index++)
     {
         char cmd[STR_MAX_SIZE] = {};
-        int nChar = 0;
+        int  nChar             = 0 ;
 
         sscanf (asmCode->commands.lines[index].lineStart, "%s%n", cmd, &nChar);
+   
+        #define DEF_CMD(name, num, arg, code)                                                                   \
+            if (strcasecmp (cmd, #name) == 0)                                                                   \
+            {                                                                                                   \
+                if (arg)                                                                                        \
+                {                                                                                               \
+                    ParseArg (asmCode->commands.lines[index].lineStart + nChar, CMD_##name, asmCode, &ip);      \
+                }                                                                                               \
+                else                                                                                            \
+                {                                                                                               \
+                    *(asmCode->asmArr + ip++) = CMD_##name;                                                     \
+                }                                                                                               \
+            }                                                                                                   \
+            else
 
-        if (strcasecmp (cmd, "push") == 0)
-        {
-            ParseArg (asmCode->commands.lines[index].lineStart + nChar, CMD_PUSH, asmCode, &ip);
-        }
-        else if ((strcasecmp (cmd, "pop") == 0))
-        {
-            ParseArg (asmCode->commands.lines[index].lineStart + nChar, CMD_POP, asmCode, &ip);
-        }
-        else if ((strcasecmp (cmd, "add") == 0))
+        #define DEF_JMP(name, num, sign)                                                                        \
+            if (strcasecmp (cmd, #name) == 0)                                                                   \
+            {                                                                                                   \
+                ParseArg (asmCode->commands.lines[index].lineStart + nChar, JMP_##name, asmCode, &ip);          \
+            }                                                                                                   \
+            else
+
+        #include "architecture.h"
+
+        if (strchr(cmd, ':') != nullptr)
         {   
-            asmCode->asmArr[ip++] = CMD_ADD;
-        }
-        else if ((strcasecmp (cmd, "sub") == 0))
-        {   
-            asmCode->asmArr[ip++] = CMD_SUB;
-        }
-        else if ((strcasecmp (cmd, "mul") == 0))
-        {   
-            asmCode->asmArr[ip++] = CMD_MUL;
-        }
-        else if ((strcasecmp (cmd, "div") == 0))
-        {   
-            asmCode->asmArr[ip++] = CMD_DIV;
-        }
-        else if ((strcasecmp (cmd, "out") == 0))
-        {   
-            asmCode->asmArr[ip++] = CMD_OUT;
-        }
-        else if ((strcasecmp (cmd, "hlt") == 0))
-        {   
-            asmCode->asmArr[ip++] = CMD_HLT;
-        }
-        else if (strcasecmp (cmd, "jmp") == 0)
-        {
-            ParseArg (asmCode->commands.lines[index].lineStart + nChar, CMD_JMP, asmCode, &ip);
-        }
-        else if (strchr (cmd, ':') != nullptr)
-        {
-            ParseLabel (cmd, asmCode, ip);
+            ParseLabel (cmd, asmCode, ip); 
         }
         else
         {
-            printf ("Error in %s! Incorrectly entered operation: %s", __func__, cmd);
-            return 1;
+            printf ("Incorrectly entered operation on %llu line: %s", index,  cmd);
+            abort();
         }
     }
+    
+    #undef DEF_CMD
+    #undef DEF_JMP
 
     return 0;
 }
@@ -144,8 +133,11 @@ int AsmCreateArray (asm_t* asmCode)
 
 int WritingBinFile (asm_t* asmCode, FILE* binaryFile)
 {
+    ASSERT (asmCode    != nullptr, -1);
+    ASSERT (binaryFile != nullptr, -1);
+
     fwrite (&asmCode->info, sizeof (asmCode->info), 1, binaryFile);
-    fwrite (asmCode->asmArr, sizeof (int), asmCode->info.nInt, binaryFile);
+    fwrite (asmCode->asmArr, sizeof (char), asmCode->info.size + asmCode->info.nArgs * sizeof (int), binaryFile);
 
     return 0;
 }
@@ -156,7 +148,12 @@ int isRegister (char* str)
 {
     ASSERT (str != nullptr, -1);
 
-    if (strlen (str) == 3 && str[0] == 'r' && str[2] == 'x' && str[1] >= 'A' && str[1] <= 'D')
+    if (strlen (str) == 3 && str[0] == 'r' && str[2] == 'x' && str[1] >= 'a' && str[1] <= 'd')
+    {
+        return str[1] - 'a' + 1;
+    }
+
+    if (strlen (str) == 3 && str[0] == 'R' && str[2] == 'X' && str[1] >= 'A' && str[1] <= 'D')
     {
         return str[1] - 'A' + 1;
     }
@@ -196,52 +193,55 @@ int isBrackets (char* str)
 
 //=====================================================================================================================================
 
-void ParseArg (char* line, int command, asm_t* asmCode, size_t* ip)
+int ParseArg (char* line, int command, asm_t* asmCode, size_t* ip)
 {
-    ASSERT (line    != nullptr, (void) -1);
-    ASSERT (asmCode != nullptr, (void) -1);
-    ASSERT (ip      != nullptr, (void) -1);
+    ASSERT (line    != nullptr, -1);
+    ASSERT (asmCode != nullptr, -1);
+    ASSERT (ip      != nullptr, -1);
 
-    bool isArg = 0;
+    int arg = 0;
 
-    if (command == CMD_JMP)
+    if (command >= JMP_JMP && command <= JMP_JNE)
     {
-        isArg = ParseJumpArg (line, asmCode, ip);
+        arg = ParseJumpArg (line, command, asmCode, ip);
     }
     else
     {
         switch (isBrackets (line))
         {
         case 0:
-            isArg = ParseCommonArg (line, command, asmCode, ip);
+            arg = ParseCommonArg (line, command, asmCode, ip);
             break;
 
         case 1:
-            isArg = ParseBracketsArg (line, command, asmCode, ip);
+            arg = ParseBracketsArg (line, command, asmCode, ip);
             break;
 
         default:
-            isArg = 1;
+            arg = 1;
             break;
         }
     }
 
-    if (isArg == 0)
+    if (arg != 0)
     {
         printf ("Error in %s! Invalid argument: %s...\n", __func__, line);
-        abort ();
+
+        return 1;
     }
+
+    return 0;
 }
 
 //=====================================================================================================================================
 
-int ParseJumpArg (char* line, asm_t* asmCode, size_t* ip)
+int ParseJumpArg (char* line, int command, asm_t* asmCode, size_t* ip)
 {
     ASSERT (line    != nullptr, -1);
     ASSERT (asmCode != nullptr, -1);
     ASSERT (ip      != nullptr, -1);
 
-    *(asmCode->asmArr + *ip) = CMD_JMP;
+    *(asmCode->asmArr + *ip) = command;
 
     int  currentValue = 0;
     char currentLabel[MAX_LABEL_SIZE] = {};
@@ -250,28 +250,26 @@ int ParseJumpArg (char* line, asm_t* asmCode, size_t* ip)
     {
         if (sscanf (line, "%d", &currentValue) == 1)
         {
-            memcpy (asmCode->asmArr + *ip + 1, &currentValue, sizeof (int));
+            memcpyInt (asmCode->asmArr + *ip + 1, &currentValue);
         }
         else
-        {
-            //TODO
-            
+        {            
             return 1;
         }
     }
     else
     {
-        if ((sscanf (line, " :%d", &currentValue)) == 1 && currentValue >= 0 && currentValue <= MAX_LABEL_COUNT)
+        if (sscanf (line, " :%d", &currentValue) == 1 && currentValue >= 0 && currentValue <= MAX_LABEL_COUNT)
         {
             if (asmCode->labels[currentValue].adress == LABEL_POISON)
             {
                 currentValue = LABEL_POISON;
 
-                memcpy (asmCode->asmArr + *ip + 1, &currentValue, sizeof (int));
+                memcpyInt (asmCode->asmArr + *ip + 1, &currentValue);
             }
             else
             {
-                memcpy (asmCode->asmArr + *ip + 1, &asmCode->labels[currentValue].adress, sizeof (int));
+                memcpyInt (asmCode->asmArr + *ip + 1, &asmCode->labels[currentValue].adress);
             }
         }
         else if (sscanf (line, " :%s", currentLabel) == 1)
@@ -280,7 +278,7 @@ int ParseJumpArg (char* line, asm_t* asmCode, size_t* ip)
             {
                 if (strcmp (asmCode->labels[num].name, currentLabel) == 0)
                 {
-                    memcpy (asmCode->asmArr + *ip + 1, &asmCode->labels[num].adress, sizeof (int));
+                    memcpyInt (asmCode->asmArr + *ip + 1, &asmCode->labels[num].adress);
                     currentValue = num;
 
                     break;
@@ -289,8 +287,6 @@ int ParseJumpArg (char* line, asm_t* asmCode, size_t* ip)
         }
         else
         {
-            //TODO
-
             return 1;
         }
     }
@@ -304,10 +300,10 @@ int ParseJumpArg (char* line, asm_t* asmCode, size_t* ip)
 
 //=====================================================================================================================================
 
-void ParseLabel (char* cmd, asm_t* asmCode, size_t ip)
+int ParseLabel (char* cmd, asm_t* asmCode, size_t ip)
 {
-    ASSERT (cmd     != nullptr, (void) -1);
-    ASSERT (asmCode != nullptr, (void) -1);
+    ASSERT (cmd     != nullptr, -1);
+    ASSERT (asmCode != nullptr, -1);
 
     int  currentAdress                      = -1;
     char currentTextLabel[MAX_LABEL_SIZE]   = {};
@@ -323,13 +319,13 @@ void ParseLabel (char* cmd, asm_t* asmCode, size_t ip)
         else
         {
             printf ("Error! Invalid label: %s in %s\n", cmd, __func__);
-            abort ();
+            return 1;
         }
     }
     else if (sscanf (cmd, "%s%n", currentTextLabel, &labelLen) == 1)
     {
         currentTextLabel[labelLen - 1] = '\0';
-        bool label = 0;
+        int label = 0;
 
         for (size_t num = 0; num < MAX_LABEL_COUNT; num++)
         {
@@ -355,15 +351,17 @@ void ParseLabel (char* cmd, asm_t* asmCode, size_t ip)
 
         if (label == 0)
         {
-            printf ("Error!"); //TODO
-            abort ();
+            printf ("Label error in %s...", __func__);
+            return 1;
         }
     }
     else
     {
         printf ("Error! Label %s in %s\n", cmd, __func__);
-        abort ();
+        return 1;
     }
+
+    return 0;
 }
 
 //=====================================================================================================================================
@@ -382,14 +380,15 @@ int ParseCommonArg (char* line, int command, asm_t* asmCode, size_t* ip)
     {
         if (command != CMD_POP && sscanf (line, "%d", &currentValue) == 1)
         {
-            *(asmCode->asmArr + *ip + 1) = CMD_PUSH | ARG_IMMED;
-            memcpy (asmCode->asmArr + *ip + 1, &currentValue, sizeof (int));
+            *(asmCode->asmArr + *ip) = CMD_PUSH | ARG_IMMED;
+
+            memcpyInt (asmCode->asmArr + *ip + 1, &currentValue);
         }
         else if (sscanf (line, "%s", currentReg) == 1  && (intReg = isRegister (currentReg)) != -1)
         {
             *(asmCode->asmArr + *ip) = command | ARG_REG;
 
-            memcpy (asmCode->asmArr + *ip + 1, &intReg, sizeof (int));
+            memcpyInt (asmCode->asmArr + *ip + 1, &intReg);
         }
         else
         {
@@ -397,7 +396,7 @@ int ParseCommonArg (char* line, int command, asm_t* asmCode, size_t* ip)
         }
 
         *ip = *ip + 1 + sizeof (int);
-        (asmCode->info.nArgs) = asmCode->info.nArgs + 1;
+        (asmCode->info.nArgs)++;
     }
     else
     {
@@ -405,8 +404,8 @@ int ParseCommonArg (char* line, int command, asm_t* asmCode, size_t* ip)
         {
             *(asmCode->asmArr + *ip) = CMD_PUSH | ARG_IMMED | ARG_REG;  
 
-            memcpy (asmCode->asmArr + *ip + 1, &currentValue, sizeof (int));
-            memcpy (asmCode->asmArr + *ip + 1 + sizeof (int), &intReg, sizeof (int));
+            memcpyInt (asmCode->asmArr + *ip + 1,                &currentValue);
+            memcpyInt (asmCode->asmArr + *ip + 1 + sizeof (int), &intReg);
         }
         else
         {
@@ -440,7 +439,8 @@ int ParseBracketsArg (char* line, int command, asm_t* asmCode, size_t* ip)
         if (sscanf (arg, "%d", &currentValue) == 1)
         {
             *(asmCode->asmArr + *ip) = command | ARG_IMMED | ARG_MEM; 
-            memcpy (asmCode->asmArr + *ip + 1, &currentValue, sizeof (int));
+
+            memcpyInt (asmCode->asmArr + *ip + 1, &currentValue);
         }
         else if (sscanf (arg, "%s", currentReg) == 1)
         {
@@ -449,7 +449,7 @@ int ParseBracketsArg (char* line, int command, asm_t* asmCode, size_t* ip)
             if ((intReg = isRegister (currentReg)) != -1)
             {
                 *(asmCode->asmArr + *ip) = command | ARG_REG | ARG_MEM;
-                memcpy (asmCode->asmArr + *ip + 1, &intReg, sizeof (int));
+                memcpyInt (asmCode->asmArr + *ip + 1, &intReg);
             }
             else
             {
@@ -474,8 +474,8 @@ int ParseBracketsArg (char* line, int command, asm_t* asmCode, size_t* ip)
             {
                 *(asmCode->asmArr + *ip) = command | ARG_IMMED | ARG_REG | ARG_MEM;  
 
-                memcpy (asmCode->asmArr + *ip + 1, &currentValue, sizeof (int));
-                memcpy (asmCode->asmArr + *ip + 1 + sizeof (int), &intReg, sizeof (int));
+                memcpyInt (asmCode->asmArr + *ip + 1, &currentValue);
+                memcpyInt (asmCode->asmArr + *ip + 1 + sizeof (int), &currentValue);  
             }
             else
             {
@@ -490,6 +490,18 @@ int ParseBracketsArg (char* line, int command, asm_t* asmCode, size_t* ip)
         *ip = *ip + 2 * sizeof (int) + 1;
         (asmCode->info.nArgs) = asmCode->info.nArgs + 2;
     }
+
+    return 0;
+}
+
+//=====================================================================================================================================
+
+int memcpyInt (char* array, int* value)
+{
+    ASSERT (array != nullptr, -1);
+    ASSERT (value != nullptr, -1);
+
+    memcpy (array, value, sizeof (int));  
 
     return 0;
 }

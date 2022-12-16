@@ -1,15 +1,15 @@
 //=====================================================================================================================================
 
-#include "architecture.h"
+#include "cpu.h"
 
 //=====================================================================================================================================
 
 int Run (int argc, const char* argv[])
 {
-    ASSERT (argc != 2, 1);
+    ASSERT (argc != 2, -1);
     
     FILE* data = fopen (argv[2], "r");
-    ASSERT (data != nullptr, 1);
+    ASSERT (data != nullptr, -1);
 
     cpu_t cpu = {};
     CpuCtor (&cpu, data);
@@ -47,7 +47,7 @@ int CpuCtor (cpu_t* cpu, FILE* binaryFile)
     }
 
     cpu->cmdArr = (char*) calloc (1, binInfo.size + sizeof (int) * binInfo.nArgs + 1);
-    ASSERT (cpu->cmdArr != nullptr, 1);
+    ASSERT (cpu->cmdArr != nullptr, -1);
 
     fread (cpu->cmdArr, sizeof (char), binInfo.size + sizeof (int) * binInfo.nArgs, binaryFile);
     
@@ -58,7 +58,7 @@ int CpuCtor (cpu_t* cpu, FILE* binaryFile)
 
 int CpuDtor (cpu_t* cpu)
 {
-    ASSERT (cpu  != nullptr, -1);
+    ASSERT (cpu != nullptr, -1);
 
     StackDtor (&cpu->stk);
     free (cpu->cmdArr);
@@ -73,112 +73,54 @@ int Execute (cpu_t* cpu)
 {
     ASSERT (cpu != nullptr, -1);
 
-    size_t ip  = 0;
-
-    int firstNum  = 0;
-    int secondNum = 0;
-
-    int currentCmd = 0;
-
-    #define CALC(stk, sign)                         \
-        firstNum    = StackPop (stk);               \
-        secondNum   = StackPop (stk);               \
-        StackPush (stk, firstNum sign secondNum);  
+    size_t ip = 0;
 
     while (*(cpu->cmdArr + ip))
     {
-        currentCmd = *(cpu->cmdArr + ip);
+        int currentCmd = *(cpu->cmdArr + ip);
+
+        #define DEF_CMD(name, num, arg, code)               \
+            case CMD_##name:                                \
+                code                                        \
+                break;
+
+        #define DEF_JMP(name, num, sign)                    \
+            case JMP_##name:                                \
+            {                                               \
+                INDEX_UP;                                   \
+                if ((currentCmd & ONLY_CMD) == JMP_JMP)     \
+                {                                           \
+                    GET_JMP_ARG;                            \
+                }                                           \
+                else                                        \
+                {                                           \
+                    VAR firstNum  = POP;                    \
+                    VAR secondNum = POP;                    \
+                                                            \
+                    if (firstNum sign secondNum)            \
+                    {                                       \
+                        GET_JMP_ARG;                        \
+                    }                                       \
+                    else                                    \
+                        ip += sizeof (int);                 \
+                }                                           \
+                break;                                      \
+            }
 
         switch (currentCmd & ONLY_CMD)
         {
-            case CMD_PUSH:
-            {
-                printf ("push");
-
-                ip++;
-                int arg = GetPushArg (currentCmd, &ip, cpu);
-                StackPush (&cpu->stk, arg);
-
-                break;
-            }
-
-            case CMD_ADD:
-            {
-                printf ("add\n");
-
-                CALC(&cpu->stk, +);
-
-                break;
-            }
-
-            case CMD_SUB:
-            {
-                printf ("sub\n");
-
-                CALC(&cpu->stk, -);
-
-                break;
-            }
-
-            case CMD_MUL:
-            {
-                printf ("mul\n");
-
-                CALC(&cpu->stk, *);
-
-                break;
-            }
-
-            case CMD_DIV:
-            {
-                printf ("div\n");
-
-                CALC(&cpu->stk, /);
-
-                break;
-            }
-
-            case CMD_OUT:
-            {
-                printf ("OUT: ");
-
-                printf ("%d\n", StackPop (&cpu->stk));
-
-                break;
-            }
-
-            case CMD_HLT:
-            {
-                printf ("hlt\n");
-
-                break;
-            }
-
-            case CMD_POP:
-            {   
-                ip++;
-                int* arg = GetPopArg (currentCmd, &ip, cpu);
-                *arg = StackPop (&cpu->stk);
-
-                break;
-            }
-
-            case CMD_JMP:
-            {
-                ip++;
-                GetJumpArg (&ip, cpu);
-
-                break;
-            }
+            #include "architecture.h"
 
             default:
-                printf ("Error! Unknown operation in %s!\n", __func__);
+                printf ("Error! An unknown operation was encountered: %d\n", *(cpu->cmdArr + ip));
+                abort();
         }
 
         ip++;
     }
 
-    #undef CALC
+    #undef DEF_CMD
+    #undef DEF_JMP
 
     return 0;
 }
