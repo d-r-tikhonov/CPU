@@ -13,13 +13,13 @@
 
 //=====================================================================================================================================
 
-const size_t STR_MAX_SIZE       = 20;
+const size_t SIGNATURE          = 256 * 256 * 'N' + 256 * 'G' + 'S';
 const size_t VERSION            = 1;
-const size_t SIGNATURE          = 'NGIS';
+const size_t STR_MAX_SIZE       = 30;
 const size_t MAX_RAM_SIZE       = 100;
 const size_t MAX_LABEL_SIZE     = 20;
 const size_t MAX_LABEL_COUNT    = 20;
-const size_t MAX_REGS_COUNT     = 5;
+const size_t MAX_REGS_COUNT     = 10;
 const size_t LABEL_POISON       = 0xCAFEBABE;
 
 //=====================================================================================================================================
@@ -51,6 +51,8 @@ struct cpu_t
     char* cmdArr;
 
     stack_t stk;
+
+    size_t size;
 
     int regs[MAX_REGS_COUNT];
     int RAM[MAX_RAM_SIZE];
@@ -111,8 +113,11 @@ int     ParseCommonArg      (char* line, int command, asm_t* asmCode, size_t* ip
 int     ParseBracketsArg    (char* line, int command, asm_t* asmCode, size_t* ip);
 int     GetPushArg          (int command, size_t* ip, cpu_t* cpu);
 int*    GetPopArg           (int command, size_t* ip, cpu_t* cpu);
-void    GetJumpArg          (size_t* ip, cpu_t* cpu);
-int     memcpyInt           (char* array, int* value);
+int     GetJumpArg          (size_t* ip, cpu_t* cpu);
+int     RunDisasm           (int argc, const char* argv[]);
+char*   ReadBin             (FILE* binaryFile);
+int     ExecuteDisasm       (char* cmdArr, FILE* disasmFile);
+int     DisasmArg           (int curCmd, char* cmdArr, size_t* ip, FILE* disasmFile);
 
 //=====================================================================================================================================
 

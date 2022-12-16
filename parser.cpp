@@ -59,13 +59,13 @@ void MatchLines (Text* text)
     size_t   lineStart   = 0;
     
     CountInText (text->buffer, '\n', &(text->nLines));
-    text->lines = (Lines*) calloc (text->nLines + 1, sizeof(Lines));
+    text->lines = (Lines*) calloc (text->nLines + 1, sizeof (Lines));
     
     for (size_t index = 1; index < text->nChar; index++)
     {
         if (*(text->buffer + index) == '\n')
         {
-            (*(text->buffer + index)= '\0');
+            *(text->buffer + index) = '\0';
 
             (text->lines + line)->lineStart = text->buffer + lineStart;
             (text->lines + line)->length    = index - lineStart;
@@ -94,9 +94,10 @@ void CountInText (char* text, char search, size_t* count)
     {
         if (*(text + index) == search)
         {
-            ++(*count);
+            (*count)++;
         }
-        ++index;
+
+        index++;
     }
 }
 

@@ -1,5 +1,9 @@
 push 10
-out
 push 20
+add
+push 3
+div
+push 2
+mul
 out
 hlt

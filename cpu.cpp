@@ -6,9 +6,9 @@
 
 int Run (int argc, const char* argv[])
 {
-    ASSERT (argc != 2, -1);
+    ASSERT (argc >= 2, -1);
     
-    FILE* data = fopen (argv[2], "r");
+    FILE* data = fopen (argv[2], "rb");
     ASSERT (data != nullptr, -1);
 
     cpu_t cpu = {};
@@ -34,19 +34,12 @@ int CpuCtor (cpu_t* cpu, FILE* binaryFile)
     infoCMD_t binInfo = {};
     fread (&binInfo, sizeof (infoCMD_t), 1, binaryFile);
 
-    if (binInfo.sign != SIGNATURE)
-    {
-        printf ("Error! The signature is uncorrected!\n");
-        abort ();
-    }
+    ASSERT (binInfo.sign == SIGNATURE, -1);
+    ASSERT (binInfo.vers == VERSION,   -1);
 
-    if (binInfo.vers != VERSION)
-    {
-        printf ("Error! The version is uncorrected!\n");
-        abort ();
-    }
+    cpu->size = binInfo.size + sizeof (int) * binInfo.nArgs + 1;
 
-    cpu->cmdArr = (char*) calloc (1, binInfo.size + sizeof (int) * binInfo.nArgs + 1);
+    cpu->cmdArr = (char*) calloc (1, cpu->size);
     ASSERT (cpu->cmdArr != nullptr, -1);
 
     fread (cpu->cmdArr, sizeof (char), binInfo.size + sizeof (int) * binInfo.nArgs, binaryFile);
@@ -102,7 +95,7 @@ int Execute (cpu_t* cpu)
                         GET_JMP_ARG;                        \
                     }                                       \
                     else                                    \
-                        ip += sizeof (int);                 \
+                        ip += sizeof (int) - 1;             \
                 }                                           \
                 break;                                      \
             }
@@ -113,7 +106,7 @@ int Execute (cpu_t* cpu)
 
             default:
                 printf ("Error! An unknown operation was encountered: %d\n", *(cpu->cmdArr + ip));
-                abort();
+                return 1;
         }
 
         ip++;
@@ -168,7 +161,7 @@ int GetPushArg (int command, size_t* ip, cpu_t* cpu)
         if (arg > MAX_RAM_SIZE)
         {
             printf ("Syntax error: %x\n", command);
-            abort ();
+            return -1;
         }
         else
         {
@@ -179,7 +172,7 @@ int GetPushArg (int command, size_t* ip, cpu_t* cpu)
     if ((command & (ARG_IMMED | ARG_REG | ARG_MEM)) == 0)
     {
         printf ("Syntax error: %x\n", command);
-        abort ();
+        return -1;
     }
 
     *ip += ipCtrl * sizeof (int) - 1;
@@ -219,7 +212,7 @@ int* GetPopArg (int command, size_t* ip, cpu_t* cpu)
         if (arg >= MAX_RAM_SIZE)
         {
             printf ("Syntax error: %x\n", command);
-            abort ();
+            return nullptr;
         }
         else
         {
@@ -239,7 +232,7 @@ int* GetPopArg (int command, size_t* ip, cpu_t* cpu)
     else
     {
         printf ("Syntax error: %x\n", command);
-        abort ();
+        return nullptr;
     }
 
     return nullptr;
@@ -247,10 +240,10 @@ int* GetPopArg (int command, size_t* ip, cpu_t* cpu)
 
 //=====================================================================================================================================
 
-void GetJumpArg (size_t* ip, cpu_t* cpu)
+int GetJumpArg (size_t* ip, cpu_t* cpu)
 {
-    ASSERT (ip  != nullptr, (void) -1);
-    ASSERT (cpu != nullptr, (void) -1);
+    ASSERT (ip  != nullptr, -1);
+    ASSERT (cpu != nullptr, -1);
 
     int arg = 0;
 
@@ -259,10 +252,12 @@ void GetJumpArg (size_t* ip, cpu_t* cpu)
     if (arg < 0)
     {
         printf ("Bad jumping on %d...\n", arg);
-        abort();
+        return 1;
     }
 
     *ip = arg - 1;
+
+    return 0;
 }
 
 //=====================================================================================================================================

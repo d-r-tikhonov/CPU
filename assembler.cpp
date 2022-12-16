@@ -10,12 +10,12 @@ const char*  LABEL_NAME_POSION  = "FREE";
 
 int Assemble (int argc, const char* argv[])
 {
-    ASSERT (argc != 2, 1);
+    ASSERT (argc >= 2, -1);
 
     FILE* source = fopen (argv[1], "r");
     ASSERT (source != nullptr, -1);
 
-    FILE* processed = fopen (argv[2], "w+");
+    FILE* processed = fopen (argv[2], "wb+");
     ASSERT (processed != nullptr, -1);
 
     asm_t asmCode = {};
@@ -23,7 +23,7 @@ int Assemble (int argc, const char* argv[])
     AsmCtor (&asmCode, source);
 
     AsmCreateArray (&asmCode);
-    AsmCreateArray (&asmCode);
+    AsmCreateArray (&asmCode);    
 
     WritingBinFile (&asmCode, processed);
 
@@ -44,13 +44,13 @@ int AsmCtor (asm_t* asmCode, FILE* source)
 
     TextCtor (&(asmCode->commands), source);
 
-    asmCode->asmArr = (char*) calloc (asmCode->info.size * 2, sizeof (int));
-    ASSERT (asmCode->asmArr != nullptr, -1); 
-
     asmCode->info.sign = SIGNATURE;
     asmCode->info.vers = VERSION;
-    asmCode->info.size = asmCode->commands.nLines - 1;
+    asmCode->info.size = asmCode->commands.nLines;
     asmCode->info.nArgs = 0;
+
+    asmCode->asmArr = (char*) calloc (asmCode->info.size * 2, sizeof (int));
+    ASSERT (asmCode->asmArr != nullptr, -1);
 
     for (size_t index = 0; index < MAX_LABEL_COUNT; index++)
     {
@@ -112,7 +112,7 @@ int AsmCreateArray (asm_t* asmCode)
 
         #include "architecture.h"
 
-        if (strchr(cmd, ':') != nullptr)
+        if (strchr (cmd, ':') != nullptr)
         {   
             ParseLabel (cmd, asmCode, ip); 
         }
@@ -250,7 +250,7 @@ int ParseJumpArg (char* line, int command, asm_t* asmCode, size_t* ip)
     {
         if (sscanf (line, "%d", &currentValue) == 1)
         {
-            memcpyInt (asmCode->asmArr + *ip + 1, &currentValue);
+            memcpy (asmCode->asmArr + *ip + 1, &currentValue, sizeof (int));
         }
         else
         {            
@@ -265,11 +265,11 @@ int ParseJumpArg (char* line, int command, asm_t* asmCode, size_t* ip)
             {
                 currentValue = LABEL_POISON;
 
-                memcpyInt (asmCode->asmArr + *ip + 1, &currentValue);
+                memcpy (asmCode->asmArr + *ip + 1, &currentValue, sizeof (int));
             }
             else
             {
-                memcpyInt (asmCode->asmArr + *ip + 1, &asmCode->labels[currentValue].adress);
+                memcpy (asmCode->asmArr + *ip + 1, &asmCode->labels[currentValue].adress, sizeof (int));
             }
         }
         else if (sscanf (line, " :%s", currentLabel) == 1)
@@ -278,7 +278,7 @@ int ParseJumpArg (char* line, int command, asm_t* asmCode, size_t* ip)
             {
                 if (strcmp (asmCode->labels[num].name, currentLabel) == 0)
                 {
-                    memcpyInt (asmCode->asmArr + *ip + 1, &asmCode->labels[num].adress);
+                    memcpy (asmCode->asmArr + *ip + 1, &asmCode->labels[num].adress, sizeof (int));
                     currentValue = num;
 
                     break;
@@ -357,7 +357,7 @@ int ParseLabel (char* cmd, asm_t* asmCode, size_t ip)
     }
     else
     {
-        printf ("Error! Label %s in %s\n", cmd, __func__);
+        printf ("Label error: %s in %s\n", cmd, __func__);
         return 1;
     }
 
@@ -372,48 +372,45 @@ int ParseCommonArg (char* line, int command, asm_t* asmCode, size_t* ip)
     ASSERT (asmCode != nullptr, -1);
     ASSERT (ip      != nullptr, -1);
 
-    int  currentValue               = 0;
-    char currentReg[STR_MAX_SIZE]   = {};
-    int  intReg                     = 0;
-
+    int  curValue              = 0;
+    int  intReg                = 0;
+    char curReg[STR_MAX_SIZE]  = {};
+    
     if (strchr (line, '+') == nullptr)
     {
-        if (command != CMD_POP && sscanf (line, "%d", &currentValue) == 1)
+        if (command != CMD_POP && sscanf (line, "%d", &curValue) == 1)
         {
-            *(asmCode->asmArr + *ip) = CMD_PUSH | ARG_IMMED;
+            *(asmCode->asmArr + *ip) = CMD_PUSH | ARG_IMMED; 
 
-            memcpyInt (asmCode->asmArr + *ip + 1, &currentValue);
+            memcpy (asmCode->asmArr + *ip + 1, &curValue, sizeof (int));
         }
-        else if (sscanf (line, "%s", currentReg) == 1  && (intReg = isRegister (currentReg)) != -1)
+        else if (sscanf (line, "%s", curReg) == 1  && (intReg = isRegister (curReg)) != -1)
         {
             *(asmCode->asmArr + *ip) = command | ARG_REG;
-
-            memcpyInt (asmCode->asmArr + *ip + 1, &intReg);
+            memcpy (asmCode->asmArr + *ip + 1, &intReg, sizeof (int));
         }
         else
-        {
             return 1;
-        }
-
-        *ip = *ip + 1 + sizeof (int);
+        
+        *ip += 1 + sizeof (int);
         (asmCode->info.nArgs)++;
     }
+    
     else
     {
-        if (command != CMD_POP && sscanf (line, "%d+%s", &currentValue, currentReg) == 2 && (intReg = isRegister (currentReg)) != -1)
+        if (command != CMD_POP && sscanf (line, "%d+%s", &curValue, curReg) == 2 && (intReg = isRegister (curReg)) != -1)
         {
             *(asmCode->asmArr + *ip) = CMD_PUSH | ARG_IMMED | ARG_REG;  
-
-            memcpyInt (asmCode->asmArr + *ip + 1,                &currentValue);
-            memcpyInt (asmCode->asmArr + *ip + 1 + sizeof (int), &intReg);
+            
+            memcpy (asmCode->asmArr + *ip + 1, &curValue, sizeof (int));
+            memcpy (asmCode->asmArr + *ip + 1 + sizeof (int), &intReg, sizeof (int));
         }
+
         else
-        {
             return 1;
-        }
 
-        *ip = *ip + 2 * sizeof (int) + 1;
-        (asmCode->info.nArgs) = asmCode->info.nArgs + 2;
+        *ip += 2 * sizeof (int) + 1;
+        (asmCode->info.nArgs) += 2;
     }
 
     return 0;
@@ -426,82 +423,62 @@ int ParseBracketsArg (char* line, int command, asm_t* asmCode, size_t* ip)
     ASSERT (line    != nullptr, -1);
     ASSERT (asmCode != nullptr, -1);
     ASSERT (ip      != nullptr, -1);
+    
 
-
-    char* arg = strchr (line, '[') + 1;
-
-    int  currentValue              = 0;
-    char currentReg[STR_MAX_SIZE]  = {};
-    int  intReg                    = 0;
-
+    char* arg = strchr(line, '[') + 1;
+    
+    int  curValue               = 0;
+    int  intReg                 = 0;
+    char curReg[STR_MAX_SIZE]   = {};
+    
     if (strchr (line, '+') == nullptr)
     {
-        if (sscanf (arg, "%d", &currentValue) == 1)
+        if (sscanf (arg, "%d", &curValue) == 1)
         {
             *(asmCode->asmArr + *ip) = command | ARG_IMMED | ARG_MEM; 
-
-            memcpyInt (asmCode->asmArr + *ip + 1, &currentValue);
+            memcpy (asmCode->asmArr + *ip + 1, &curValue, sizeof (int));
         }
-        else if (sscanf (arg, "%s", currentReg) == 1)
+        else if (sscanf (arg, "%s", curReg) == 1)
         {
-            currentReg[strlen (currentReg) - 1] = '\0';
+            curReg[strlen (curReg) - 1] = '\0';
 
-            if ((intReg = isRegister (currentReg)) != -1)
+            if ((intReg = isRegister (curReg)) != -1)
             {
                 *(asmCode->asmArr + *ip) = command | ARG_REG | ARG_MEM;
-                memcpyInt (asmCode->asmArr + *ip + 1, &intReg);
+                memcpy (asmCode->asmArr + *ip + 1, &intReg, sizeof (int));
             }
             else
-            {
                 return 1;
-            }
         }
         else
-        {
             return 1;
-        }
 
-        *ip = *ip + 1 + sizeof (int);
-        (asmCode->info.nArgs) =  asmCode->info.nArgs + 1;
+        *ip += 1 + sizeof (int);
+        (asmCode->info.nArgs)++;
     }
+    
     else
     {
-        if (sscanf (arg, "%d+%s", &currentValue, currentReg) == 2)
+        if (sscanf (arg, "%d+%s", &curValue, curReg) == 2)
         {
-            currentReg[strlen (currentReg) - 1] = '\0';
+            curReg[strlen (curReg) - 1] = '\0';
 
-            if ((intReg = isRegister (currentReg)) != -1)
+            if ((intReg = isRegister (curReg)) != -1)
             {
                 *(asmCode->asmArr + *ip) = command | ARG_IMMED | ARG_REG | ARG_MEM;  
-
-                memcpyInt (asmCode->asmArr + *ip + 1, &currentValue);
-                memcpyInt (asmCode->asmArr + *ip + 1 + sizeof (int), &currentValue);  
+            
+                memcpy (asmCode->asmArr + *ip + 1, &curValue, sizeof (int));
+                memcpy (asmCode->asmArr + *ip + 1 + sizeof (int), &intReg, sizeof (int));
             }
             else
-            {
                 return 1;
-            }
         }
         else
-        {
             return 1;
-        }
 
-        *ip = *ip + 2 * sizeof (int) + 1;
-        (asmCode->info.nArgs) = asmCode->info.nArgs + 2;
+        *ip += 2 * sizeof (int) + 1;
+        (asmCode->info.nArgs) += 2;
     }
-
-    return 0;
-}
-
-//=====================================================================================================================================
-
-int memcpyInt (char* array, int* value)
-{
-    ASSERT (array != nullptr, -1);
-    ASSERT (value != nullptr, -1);
-
-    memcpy (array, value, sizeof (int));  
 
     return 0;
 }
