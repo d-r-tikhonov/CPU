@@ -6,7 +6,7 @@
 
 int Run (int argc, const char* argv[])
 {
-    ASSERT (argc >= 2, -1);
+    ASSERT (argc >= 3, -1);
     
     FILE* data = fopen (argv[2], "rb");
     ASSERT (data != nullptr, -1);

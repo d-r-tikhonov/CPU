@@ -10,7 +10,7 @@ const char*  LABEL_NAME_POSION  = "FREE";
 
 int Assemble (int argc, const char* argv[])
 {
-    ASSERT (argc >= 2, -1);
+    ASSERT (argc >= 3, -1);
 
     FILE* source = fopen (argv[1], "r");
     ASSERT (source != nullptr, -1);

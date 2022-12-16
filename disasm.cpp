@@ -6,9 +6,9 @@
 
 int RunDisasm (int argc, const char* argv[])
 {
-    ASSERT (argc >= 3, -1);
+    ASSERT (argc >= 4, -1);
 
-    FILE* data = fopen (argv[1], "rb");
+    FILE* data = fopen (argv[2], "rb");
     ASSERT (data != nullptr, -1);
 
     FILE* disasmFile = fopen (argv[3], "w+");
