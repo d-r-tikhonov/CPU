@@ -79,13 +79,13 @@ int AsmCreateArray (asm_t* asmCode)
 {
     ASSERT (asmCode != nullptr, -1);
 
-    size_t ip = 0;
+    size_t ip    = 0;
     size_t index = 0;
 
     for (index = 0, ip = 0; index < asmCode->info.size; index++)
     {
         char cmd[STR_MAX_SIZE] = {};
-        int  nChar             = 0 ;
+        int  nChar             = 0;
 
         sscanf (asmCode->commands.lines[index].lineStart, "%s%n", cmd, &nChar);
    
@@ -305,59 +305,55 @@ int ParseLabel (char* cmd, asm_t* asmCode, size_t ip)
     ASSERT (cmd     != nullptr, -1);
     ASSERT (asmCode != nullptr, -1);
 
-    int  currentAdress                      = -1;
-    char currentTextLabel[MAX_LABEL_SIZE]   = {};
-    int  labelLen                           = 0;
+    size_t  currentLabel                 = 0;
+    int     labelLen                     = 0;
+    char    curTextLabel[MAX_LABEL_SIZE] = {};
 
-    if (sscanf (cmd, "%d:", &currentAdress) == 1)
+    if (sscanf (cmd, "%d:", &currentLabel) == 1)
     {
-        if (currentAdress >= 0 && currentAdress < MAX_LABEL_COUNT && asmCode->labels[currentAdress].adress == LABEL_POISON)
+        if (currentLabel < MAX_LABEL_COUNT && asmCode->labels[currentLabel].adress == LABEL_POISON)
         {
-            asmCode->labels[currentAdress].name   = cmd;
-            asmCode->labels[currentAdress].adress = ip;
+            asmCode->labels[currentLabel].name   = cmd;
+            asmCode->labels[currentLabel].adress = ip;
         }
+        else if (currentLabel < MAX_LABEL_COUNT && asmCode->labels[currentLabel].adress != LABEL_POISON) ;
         else
         {
-            printf ("Error! Invalid label: %s in %s\n", cmd, __func__);
+            printf ("Label error: %s\n", cmd);
             return 1;
         }
     }
-    else if (sscanf (cmd, "%s%n", currentTextLabel, &labelLen) == 1)
+    else if (sscanf (cmd, "%s%n", curTextLabel, &labelLen) == 1)
     {
-        currentTextLabel[labelLen - 1] = '\0';
-        int label = 0;
-
-        for (size_t num = 0; num < MAX_LABEL_COUNT; num++)
+        curTextLabel[labelLen - 1] = '\0';
+        
+        int labelCtrl = 0;
+        for (size_t index = 0; index < MAX_LABEL_COUNT; index++)
         {
-            if (strcmp (asmCode->labels[num].name, LABEL_NAME_POSION) == 0)
+            if (strcmp (asmCode->labels[index].name, LABEL_NAME_POSION) == 0)
             {
-                asmCode->labels[num].name = currentTextLabel;
+                asmCode->labels[index].name   = curTextLabel;
 
-                asmCode->labels[num].adress = ip;
+                asmCode->labels[index].adress = ip;
 
-                currentAdress = num;
+                currentLabel = index;    
 
-                label = 1;
+                labelCtrl = 1;
 
                 break;
             }
-            else if (asmCode->labels[num].adress != LABEL_POISON)
+            else if (asmCode->labels[index].adress != LABEL_POISON)
             {
-                label = 1;
-                
+                labelCtrl = 1;
                 break;
             }
         }
-
-        if (label == 0)
-        {
-            printf ("Label error in %s...", __func__);
-            return 1;
-        }
+        
+        ASSERT (labelCtrl != 0, 1);
     }
-    else
+    else 
     {
-        printf ("Label error: %s in %s\n", cmd, __func__);
+        printf ("Error! Label is %s - ...\n", cmd);
         return 1;
     }
 
@@ -425,7 +421,7 @@ int ParseBracketsArg (char* line, int command, asm_t* asmCode, size_t* ip)
     ASSERT (ip      != nullptr, -1);
     
 
-    char* arg = strchr(line, '[') + 1;
+    char* arg = strchr (line, '[') + 1;
     
     int  curValue               = 0;
     int  intReg                 = 0;

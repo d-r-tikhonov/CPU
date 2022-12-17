@@ -57,7 +57,6 @@ int CpuDtor (cpu_t* cpu)
     free (cpu->cmdArr);
 
     return 0;
-    
 }
 
 //=====================================================================================================================================
@@ -245,15 +244,9 @@ int GetJumpArg (size_t* ip, cpu_t* cpu)
     ASSERT (ip  != nullptr, -1);
     ASSERT (cpu != nullptr, -1);
 
-    int arg = 0;
+    size_t arg = 0;
 
     memcpy (&arg, cpu->cmdArr + *ip, sizeof (int));
-
-    if (arg < 0)
-    {
-        printf ("Bad jumping on %d...\n", arg);
-        return 1;
-    }
 
     *ip = arg - 1;
 

@@ -18,7 +18,7 @@
 
 #define BAD_INP                                                 \
     {                                                           \
-        printf("Incorrect input value\n");                      \
+        printf ("Incorrect input value\n");                     \
         abort();                                                \
     }
 
@@ -26,7 +26,7 @@
 
 DEF_CMD(HLT,  0, 0, 
 {
-    ;
+    printf ("\nThe program is completed!\n");
 })
 
 DEF_CMD(PUSH, 1, 1, 
@@ -72,11 +72,15 @@ DEF_CMD(DIV, 5, 0,
 
 DEF_CMD(OUT, 6, 0,
 {
+    printf ("Your answer: ");
+
     printf ("%d\n", POP);
 })
 
 DEF_CMD(INP, 7, 0,
 {
+    printf ("Enter a number: ");
+
     VAR num  = 0;
 
     if (scanf ("%d", &num) != 1)
@@ -90,6 +94,36 @@ DEF_CMD(POP, 8, 1,
     INDEX_UP;
     VAR* arg = GET_POP_ARG;
     *arg = POP;
+})
+
+DEF_CMD(INF, 17, 0,
+{
+    printf ("Infinite number of roots.\n");
+})
+
+DEF_CMD(NO_SOL, 18, 0,
+{
+    printf ("No solutions.\n");
+})
+
+DEF_CMD(ROOT_PR, 19, 0,
+{
+    VAR firstRoot  = POP;
+    VAR secondRoot = POP;
+
+    printf ("First root:  %d\n",  firstRoot);
+    printf ("Second root: %d\n", secondRoot);
+})
+
+DEF_CMD(SQRT, 20, 0, 
+{
+    VAR arg = floor (sqrt (POP));
+    PUSH (arg);
+})
+
+DEF_CMD(MINUS_PR, 21, 0,
+{
+    printf ("-");
 })
 
 //=====================================================================================================================================

@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "parser.h"
 #include "stack.h"
@@ -26,7 +27,7 @@ const size_t LABEL_POISON       = 0xCAFEBABE;
 
 struct label_t
 {
-    int adress;
+    size_t adress;
     char* name;
 };
 
