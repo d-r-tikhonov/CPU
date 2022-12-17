@@ -86,8 +86,8 @@ int Execute (cpu_t* cpu)
                 }                                           \
                 else                                        \
                 {                                           \
-                    VAR firstNum  = POP;                    \
                     VAR secondNum = POP;                    \
+                    VAR firstNum  = POP;                    \
                                                             \
                     if (firstNum sign secondNum)            \
                     {                                       \

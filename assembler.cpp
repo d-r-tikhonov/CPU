@@ -207,7 +207,7 @@ int ParseArg (char* line, int command, asm_t* asmCode, size_t* ip)
 
     int arg = 0;
 
-    if (command >= JMP_JMP && command <= JMP_CALL)
+    if (command >= JMP_JMP && command <= JMP_JNE)
     {
         arg = ParseJumpArg (line, command, asmCode, ip);
     }

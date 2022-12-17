@@ -108,10 +108,10 @@ DEF_CMD(NO_SOL, 19, 0,
 
 DEF_CMD(ROOT_PR, 20, 0,
 {
-    VAR INTEG = POP;
-    VAR FRAC  = POP;
+    VAR rootI = POP;
+    VAR rootF = POP;
     
-    printf("%d,%d\n", INTEG, FRAC);
+    printf("%d.%d\n", rootI, abs (rootF));
 })
 
 
@@ -119,11 +119,6 @@ DEF_CMD(SQRT, 21, 0,
 {
     VAR arg = floor (sqrt (POP));
     PUSH (arg);
-})
-
-DEF_CMD(MINUS_PR, 22, 0,
-{
-    printf ("-");
 })
 
 //=====================================================================================================================================
