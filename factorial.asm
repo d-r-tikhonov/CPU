@@ -1,25 +1,25 @@
-PUSH 1
-POP [0]
-INP
-POP RAX
-PUSH 1
-POP RBX
-PUSH 1
-POP RCX
-7:
-PUSH RCX
-PUSH RBX
-ADD
-PUSH [0]
-MUL
-POP [0]
-PUSH RCX
-PUSH 1
-ADD
-POP RCX
-PUSH RCX
-PUSH RAX
-JNE :7
-PUSH [0]
-OUT
-HLT
+push 1
+pop [0]
+inp
+pop rax
+push 1
+pop rbx
+push 1
+pop rcx
+0:
+push rcx
+push rbx
+add
+push [0]
+mul
+pop [0]
+push rcx
+push 1
+add
+pop rcx
+push rcx
+push rax
+jne :0
+push [0]
+out
+hlt

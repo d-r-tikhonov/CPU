@@ -85,7 +85,13 @@ int AsmCreateArray (asm_t* asmCode)
     for (index = 0, ip = 0; index < asmCode->info.size; index++)
     {
         char cmd[STR_MAX_SIZE] = {};
-        int  nChar             = 0;
+
+        if (asmCode->commands.lines[index].lineStart[0] == '/' || asmCode->commands.lines[index].lineStart[0] == '\0')
+        {
+            continue;
+        }
+
+        int  nChar = 0;
 
         sscanf (asmCode->commands.lines[index].lineStart, "%s%n", cmd, &nChar);
    
@@ -148,12 +154,12 @@ int isRegister (char* str)
 {
     ASSERT (str != nullptr, -1);
 
-    if (strlen (str) == 3 && str[0] == 'r' && str[2] == 'x' && str[1] >= 'a' && str[1] <= 'd')
+    if (strlen (str) == 3 && str[0] == 'r' && str[2] == 'x' && str[1] >= 'a' && str[1] <= 'i')
     {
         return str[1] - 'a' + 1;
     }
 
-    if (strlen (str) == 3 && str[0] == 'R' && str[2] == 'X' && str[1] >= 'A' && str[1] <= 'D')
+    if (strlen (str) == 3 && str[0] == 'R' && str[2] == 'X' && str[1] >= 'A' && str[1] <= 'I')
     {
         return str[1] - 'A' + 1;
     }
@@ -201,7 +207,7 @@ int ParseArg (char* line, int command, asm_t* asmCode, size_t* ip)
 
     int arg = 0;
 
-    if (command >= JMP_JMP && command <= JMP_JNE)
+    if (command >= JMP_JMP && command <= JMP_CALL)
     {
         arg = ParseJumpArg (line, command, asmCode, ip);
     }
@@ -243,12 +249,12 @@ int ParseJumpArg (char* line, int command, asm_t* asmCode, size_t* ip)
 
     *(asmCode->asmArr + *ip) = command;
 
-    int  currentValue = 0;
-    char currentLabel[MAX_LABEL_SIZE] = {};
+    size_t  currentValue = 0;
+    char    currentLabel[MAX_LABEL_SIZE] = {};
 
     if (strchr (line, ':') == nullptr)
     {
-        if (sscanf (line, "%d", &currentValue) == 1)
+        if (sscanf (line, "%lld", &currentValue) == 1)
         {
             memcpy (asmCode->asmArr + *ip + 1, &currentValue, sizeof (int));
         }
@@ -259,7 +265,7 @@ int ParseJumpArg (char* line, int command, asm_t* asmCode, size_t* ip)
     }
     else
     {
-        if (sscanf (line, " :%d", &currentValue) == 1 && currentValue >= 0 && currentValue <= MAX_LABEL_COUNT)
+        if (sscanf (line, " :%lld", &currentValue) == 1 && currentValue <= MAX_LABEL_COUNT)
         {
             if (asmCode->labels[currentValue].adress == LABEL_POISON)
             {
@@ -309,7 +315,7 @@ int ParseLabel (char* cmd, asm_t* asmCode, size_t ip)
     int     labelLen                     = 0;
     char    curTextLabel[MAX_LABEL_SIZE] = {};
 
-    if (sscanf (cmd, "%d:", &currentLabel) == 1)
+    if (sscanf (cmd, "%lld:", &currentLabel) == 1)
     {
         if (currentLabel < MAX_LABEL_COUNT && asmCode->labels[currentLabel].adress == LABEL_POISON)
         {

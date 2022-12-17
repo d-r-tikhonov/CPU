@@ -1,7 +1,7 @@
 //=====================================================================================================================================
 
-#define POP          StackPop  (&cpu->stk)
-#define PUSH(arg)    StackPush (&cpu->stk, (arg))
+#define POP          StackPop   (&cpu->stk)
+#define PUSH(arg)    StackPush  (&cpu->stk, (arg))
 #define VAR          int
 #define GET_PUSH_ARG GetPushArg (currentCmd, &ip, cpu) 
 #define GET_POP_ARG  GetPopArg  (currentCmd, &ip, cpu)
@@ -96,32 +96,32 @@ DEF_CMD(POP, 8, 1,
     *arg = POP;
 })
 
-DEF_CMD(INF, 17, 0,
+DEF_CMD(INF, 18, 0,
 {
     printf ("Infinite number of roots.\n");
 })
 
-DEF_CMD(NO_SOL, 18, 0,
+DEF_CMD(NO_SOL, 19, 0,
 {
     printf ("No solutions.\n");
 })
 
-DEF_CMD(ROOT_PR, 19, 0,
+DEF_CMD(ROOT_PR, 20, 0,
 {
-    VAR firstRoot  = POP;
-    VAR secondRoot = POP;
-
-    printf ("First root:  %d\n",  firstRoot);
-    printf ("Second root: %d\n", secondRoot);
+    VAR INTEG = POP;
+    VAR FRAC  = POP;
+    
+    printf("%d,%d\n", INTEG, FRAC);
 })
 
-DEF_CMD(SQRT, 20, 0, 
+
+DEF_CMD(SQRT, 21, 0, 
 {
     VAR arg = floor (sqrt (POP));
     PUSH (arg);
 })
 
-DEF_CMD(MINUS_PR, 21, 0,
+DEF_CMD(MINUS_PR, 22, 0,
 {
     printf ("-");
 })
@@ -136,9 +136,9 @@ DEF_JMP(JAE, 12, >=)
 
 DEF_JMP(JE, 13, ==)
 
-DEF_JMP(JBE, 14, <)
+DEF_JMP(JBE, 14, <=)
 
-DEF_JMP(JB, 15, <=)
+DEF_JMP(JB, 15, <)
 
 DEF_JMP(JNE, 16, !=)
 
